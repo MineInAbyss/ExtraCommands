@@ -41,7 +41,8 @@ public class GameModeCommand implements CommandExecutor, TabCompleter {
                 case "adventure", "a" -> player.setGameMode(GameMode.ADVENTURE);
                 default -> sender.sendMessage(Component.text("Not a valid gamemode").color(ExtraCommands.ERROR));
             }
-            sender.sendMessage(Component.text("Gamemode of " + ExtraCommands.miniMessage.serialize(player.displayName()) + " set to ").color(ExtraCommands.INFO).append(Component.text(player.getGameMode().name()).color(ExtraCommands.ERROR)));
+            if (!gamemode.isEmpty())
+                sender.sendMessage(Component.text("Gamemode of " + ExtraCommands.miniMessage.serialize(player.displayName()) + " set to ").color(ExtraCommands.INFO).append(Component.text(player.getGameMode().name()).color(ExtraCommands.ERROR)));
         }
         return true;
     }

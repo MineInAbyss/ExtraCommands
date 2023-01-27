@@ -76,12 +76,13 @@ bukkit {
     main = "com.mineinabyss.extracommands.ExtraCommands"
     version = "${project.version}"
     apiVersion = "1.19"
-    authors = listOf("Author")
+    authors = listOf("boy0000")
     commands.register("ptime")
     commands.register("pweather")
-    commands.register("gamemode")
+    commands.register("gamemode").configure { this.aliases = listOf("gm", "gmc", "gma", "gms", "gmsp") }
     commands.register("seen")
     commands.register("hunger")
+    commands.register("god")
 }
 
 val compileKotlin: KotlinCompile by tasks

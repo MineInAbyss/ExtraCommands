@@ -23,7 +23,7 @@ public final class ExtraCommands extends JavaPlugin {
         getCommand("gamemode").setExecutor(new GameModeCommand());
         getCommand("seen").setExecutor(new SeenCommand());
         getCommand("hunger").setExecutor(new HungerCommand());
-
+        getCommand("god").setExecutor(new GodCommand());
     }
 
     public static boolean checkPermission(CommandSender sender, String permission) {
