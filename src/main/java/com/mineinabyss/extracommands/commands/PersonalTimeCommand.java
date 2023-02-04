@@ -61,6 +61,7 @@ public class PersonalTimeCommand implements CommandExecutor, TabCompleter {
             if (sender instanceof Player p && p.getUniqueId().equals(player.getUniqueId()) && !ExtraCommands.checkPermission(sender, "extracommands.ptime.others")) return false;
 
             final String timeArg = firstArg.replace("@", "");
+            Component errorMsg = Component.text("Please give a valid time").color(ExtraCommands.ERROR);
             Long time;
             try {
                 time = Long.parseLong(timeArg);
@@ -70,16 +71,16 @@ public class PersonalTimeCommand implements CommandExecutor, TabCompleter {
                     try {
                         time = Long.parseLong(String.valueOf(nameToTicks.getOrDefault(timeArg, 0)));
                     } catch (NumberFormatException e2) {
-                        sender.sendMessage(Component.text("Please give a valid time").color(ExtraCommands.ERROR));
+                        sender.sendMessage(errorMsg);
                         return false;
                     }
+                } else {
+                    sender.sendMessage(errorMsg);
+                    return false;
                 }
-                sender.sendMessage(Component.text("Please give a valid time").color(ExtraCommands.ERROR));
-                return false;
             }
 
             setPlayerTime(player, time, !firstArg.startsWith("@"));
-
             sender.sendMessage(Component.text("Set time of " + ExtraCommands.miniMessage.serialize(player.displayName()) + " to ").color(ExtraCommands.INFO).append(Component.text(time + " ticks").color(ExtraCommands.ERROR)));
         }
 
