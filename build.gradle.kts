@@ -1,69 +1,25 @@
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import net.minecrell.pluginyml.paper.PaperPluginDescription
 
 plugins {
-    id("java")
-    kotlin("jvm") version "1.8.0"
-    id("com.github.johnrengelman.shadow") version "7.1.2"
-    id("xyz.jpenilla.run-paper") version "2.0.1"
-    id("net.minecrell.plugin-yml.bukkit") version "0.5.2" // Generates plugin.yml
+    alias(libs.plugins.mia.kotlin.jvm)
+    alias(libs.plugins.kotlinx.serialization)
+    alias(libs.plugins.mia.papermc)
+    alias(libs.plugins.mia.copyjar)
+    alias(libs.plugins.mia.publication)
+    alias(libs.plugins.mia.autoversion)
+    alias(libs.plugins.shadowjar)
+    id("net.minecrell.plugin-yml.paper") version "0.6.0"
 }
-
-group = "com.mineinabyss"
-version = "1.0"
 
 repositories {
     mavenCentral()
-    maven("https://repo.papermc.io/repository/maven-public/")
+    maven("https://repo.mineinabyss.com/releases")
+    maven("https://repo.mineinabyss.com/snapshots")
+    mavenLocal()
 }
 
 dependencies {
-    compileOnly("io.papermc.paper:paper-api:1.19.3-R0.1-SNAPSHOT")
-    implementation(kotlin("stdlib-jdk8"))
-}
-
-java {
-    toolchain.languageVersion.set(JavaLanguageVersion.of(17))
-}
-
-tasks {
-
-    /*assemble {
-        dependsOn(reobfJar)
-    }*/
-
-    compileJava {
-        options.encoding = Charsets.UTF_8.name()
-        options.release.set(17)
-    }
-
-    javadoc {
-        options.encoding = Charsets.UTF_8.name()
-    }
-
-    processResources {
-        duplicatesStrategy = DuplicatesStrategy.INCLUDE
-        filteringCharset = Charsets.UTF_8.name()
-    }
-
-    runServer {
-        minecraftVersion("1.19.3")
-    }
-
-    shadowJar {
-        archiveFileName.set("ExtraCommands.jar")
-    }
-
-    build {
-        dependsOn(shadowJar)
-    }
-
-    /*
-    reobfJar {
-      // This is an example of how you might change the output location for reobfJar. It's recommended not to do this
-      // for a variety of reasons, however it's asked frequently enough that an example of how to do it is included here.
-      outputJar.set(layout.buildDirectory.file("libs/PaperweightTestPlugin-${project.version}.jar"))
-    }
-     */
+    compileOnly(libs.bundles.idofront.core)
 }
 
 java {
@@ -71,21 +27,20 @@ java {
 }
 
 
-bukkit {
-    load = net.minecrell.pluginyml.bukkit.BukkitPluginDescription.PluginLoadOrder.STARTUP
+paper {
     main = "com.mineinabyss.extracommands.ExtraCommands"
-    version = "${project.version}"
-    apiVersion = "1.19"
+    name = "ExtraCommands"
+    prefix = "ExtraCommands"
+    val version: String by project
+    this.version = version
     authors = listOf("boy0000")
-    commands.register("ptime")
-    commands.register("pweather")
-    commands.register("gamemode").configure { this.aliases = listOf("gm", "gmc", "gma", "gms", "gmsp") }
-    commands.register("seen")
-    commands.register("hunger")
-    commands.register("god")
-}
+    apiVersion = "1.20"
 
-val compileKotlin: KotlinCompile by tasks
-compileKotlin.kotlinOptions {
-    jvmTarget = "1.8"
+    serverDependencies {
+        register("Idofront") {
+            required = true
+            load = PaperPluginDescription.RelativeLoadOrder.BEFORE
+            joinClasspath = true
+        }
+    }
 }

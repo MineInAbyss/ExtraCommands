@@ -1,11 +1,26 @@
 pluginManagement {
     repositories {
         gradlePluginPortal()
-        maven("https://repo.papermc.io/repository/maven-public/")
+
+        maven("https://repo.mineinabyss.com/releases")
+        maven("https://repo.mineinabyss.com/snapshots")
+        maven("https://repo.papermc.io/repository/maven-public/") //Paper
+        mavenLocal()
     }
 
-    plugins {
-        kotlin("jvm") version "1.8.0"
+}
+
+dependencyResolutionManagement {
+    val idofrontVersion: String by settings
+
+    repositories {
+        maven("https://repo.mineinabyss.com/releases")
+        maven("https://repo.mineinabyss.com/snapshots")
+        mavenLocal()
+    }
+
+    versionCatalogs {
+        create("libs").from("com.mineinabyss:catalog:$idofrontVersion")
     }
 }
 rootProject.name = "ExtraCommands"
