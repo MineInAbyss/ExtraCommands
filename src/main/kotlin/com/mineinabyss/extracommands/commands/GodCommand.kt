@@ -1,5 +1,6 @@
 package com.mineinabyss.extracommands.commands
 
+import com.mineinabyss.extracommands.extraCommands
 import com.mineinabyss.idofront.commands.entrypoint.CommandDSLEntrypoint
 import com.mineinabyss.idofront.commands.execution.IdofrontCommandExecutor
 import com.mineinabyss.idofront.commands.extensions.actions.playerAction
@@ -13,3 +14,6 @@ fun CommandDSLEntrypoint.godCommand() {
         }
     }
 }
+
+fun godTabComplete(args: Array<out String>) =
+    extraCommands.plugin.server.onlinePlayers.map { it.name }.filter { it.startsWith(args[0]) }.takeIf { args.size == 1 } ?: emptyList()

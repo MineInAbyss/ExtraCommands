@@ -1,5 +1,6 @@
 package com.mineinabyss.extracommands.commands
 
+import com.mineinabyss.extracommands.extraCommands
 import com.mineinabyss.idofront.commands.arguments.enumArg
 import com.mineinabyss.idofront.commands.arguments.genericArg
 import com.mineinabyss.idofront.commands.entrypoint.CommandDSLEntrypoint
@@ -15,6 +16,12 @@ fun CommandDSLEntrypoint.personalTimeCommand() {
             player.success("Set time to $time ticks ${if (sender == player) "" else "for ${player.name}"}")
         }
     }
+}
+
+fun personalTimeTabComplete(args: Array<out String>) = when (args.size) {
+    1 -> PersonalTimeType.entries.map { it.name.lowercase() }.filter { it.startsWith(args[0], true) }
+    2 -> extraCommands.plugin.server.onlinePlayers.map { it.name }.filter { it.startsWith(args[1]) }
+    else -> emptyList()
 }
 
 private fun setPlayerTime(player: Player, ticks: Long?) {

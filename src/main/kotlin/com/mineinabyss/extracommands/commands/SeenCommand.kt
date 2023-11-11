@@ -1,9 +1,11 @@
 package com.mineinabyss.extracommands.commands
 
+import com.mineinabyss.extracommands.extraCommands
 import com.mineinabyss.idofront.commands.arguments.offlinePlayerArg
 import com.mineinabyss.idofront.commands.entrypoint.CommandDSLEntrypoint
 import com.mineinabyss.idofront.messaging.error
 import org.bukkit.OfflinePlayer
+import org.bukkit.command.CommandSender
 import java.time.Instant
 import java.util.*
 import java.util.concurrent.TimeUnit
@@ -27,6 +29,9 @@ fun CommandDSLEntrypoint.seenCommand() {
         }
     }
 }
+
+fun seenTabComplete(args: Array<out String>) =
+    extraCommands.plugin.server.onlinePlayers.map { it.name }.filter { it.startsWith(args[0]) }.takeIf { args.size == 1 } ?: emptyList()
 
 
 private class TimeSince(val days: Int, val hours: Long, val minutes: Long, val seconds: Long)
