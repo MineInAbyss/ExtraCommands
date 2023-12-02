@@ -14,6 +14,7 @@ class ExtraCommandExecutor : IdofrontCommandExecutor(), TabCompleter {
         gameModeCommand()
         hungerCommand()
         godCommand()
+        mineInAbyssCommands()
     }
 
     override fun onTabComplete(
