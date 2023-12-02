@@ -5,7 +5,6 @@ import com.mineinabyss.idofront.commands.arguments.offlinePlayerArg
 import com.mineinabyss.idofront.commands.entrypoint.CommandDSLEntrypoint
 import com.mineinabyss.idofront.messaging.error
 import org.bukkit.OfflinePlayer
-import org.bukkit.command.CommandSender
 import java.time.Instant
 import java.util.*
 import java.util.concurrent.TimeUnit
@@ -39,8 +38,8 @@ private class TimeSince(val days: Int, val hours: Long, val minutes: Long, val s
 private fun calculateTime(s: Long): TimeSince {
     val days = TimeUnit.MILLISECONDS.toDays(s).toInt()
     val hours = TimeUnit.MILLISECONDS.toHours(s) - TimeUnit.DAYS.toHours(days.toLong())
-    val minutes = TimeUnit.MILLISECONDS.toMinutes(s) - TimeUnit.HOURS.toMinutes(days.toLong())
-    val seconds = TimeUnit.MILLISECONDS.toSeconds(s) - TimeUnit.MINUTES.toSeconds(minutes)
+    val minutes = TimeUnit.MILLISECONDS.toMinutes(s) - TimeUnit.HOURS.toMinutes(hours)
+    val seconds = TimeUnit.MILLISECONDS.toSeconds(s) - TimeUnit.HOURS.toSeconds(hours) - TimeUnit.MINUTES.toSeconds(minutes)
     return TimeSince(days, hours, minutes, seconds)
 }
 
