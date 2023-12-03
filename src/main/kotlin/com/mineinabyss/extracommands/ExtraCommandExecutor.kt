@@ -14,6 +14,8 @@ class ExtraCommandExecutor : IdofrontCommandExecutor(), TabCompleter {
         gameModeCommand()
         hungerCommand()
         godCommand()
+        suicideCommand()
+
         mineInAbyssCommands()
     }
 
