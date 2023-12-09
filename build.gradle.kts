@@ -20,6 +20,7 @@ repositories {
 
 dependencies {
     compileOnly(libs.bundles.idofront.core)
+    compileOnly(extraLibs.geary.papermc)
 }
 
 java {
@@ -38,6 +39,11 @@ paper {
 
     serverDependencies {
         register("Idofront") {
+            required = true
+            load = PaperPluginDescription.RelativeLoadOrder.BEFORE
+            joinClasspath = true
+        }
+        register("Geary") {
             required = true
             load = PaperPluginDescription.RelativeLoadOrder.BEFORE
             joinClasspath = true
