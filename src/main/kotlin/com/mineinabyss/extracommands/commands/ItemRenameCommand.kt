@@ -8,19 +8,24 @@ import com.mineinabyss.geary.papermc.tracking.items.components.SetItemIgnoredPro
 import com.mineinabyss.idofront.commands.arguments.intArg
 import com.mineinabyss.idofront.commands.arguments.stringArg
 import com.mineinabyss.idofront.commands.entrypoint.CommandDSLEntrypoint
+import com.mineinabyss.idofront.commands.extensions.actions.ensureSenderIsPlayer
 import com.mineinabyss.idofront.commands.extensions.actions.playerAction
 import com.mineinabyss.idofront.items.editItemMeta
+import com.mineinabyss.idofront.messaging.error
 import com.mineinabyss.idofront.serialization.SerializableItemStack
 import com.mineinabyss.idofront.textcomponents.miniMsg
+import org.bukkit.entity.Player
 import kotlin.math.max
 import kotlin.math.min
 
 fun CommandDSLEntrypoint.itemRenameCommand() {
     command("itemrename") {
-        val renamed: String by stringArg { default = "" }
-        playerAction {
-            player.inventory.itemInMainHand.editItemMeta {
-                if (renamed.isEmpty() || renamed == "null" ) displayName(null)
+        ensureSenderIsPlayer()
+        action {
+            val player = sender as? Player ?: return@action
+            val renamed = arguments.joinToString(" ")
+            player.inventory.itemInMainHand.takeIf { !it.isEmpty }?.editItemMeta {
+                if (renamed.isEmpty() ) displayName(null)
                 else displayName(renamed.miniMsg())
 
                 when {
@@ -39,7 +44,7 @@ fun CommandDSLEntrypoint.itemRenameCommand() {
                         else persistentDataContainer.encode(SetItemIgnoredProperties(ignore))
                     }
                 }
-            }
+            } ?: sender.error("You must be holding an item to rename it!")
         }
     }
 }
