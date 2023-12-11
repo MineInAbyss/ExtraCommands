@@ -16,6 +16,7 @@ class ExtraCommandExecutor : IdofrontCommandExecutor(), TabCompleter {
         godCommand()
         suicideCommand()
         itemRenameCommand()
+        afkCommand()
 
         mineInAbyssCommands()
     }

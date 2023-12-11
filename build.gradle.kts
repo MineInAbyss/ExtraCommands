@@ -15,12 +15,14 @@ repositories {
     mavenCentral()
     maven("https://repo.mineinabyss.com/releases")
     maven("https://repo.mineinabyss.com/snapshots")
+    maven("https://repo.extendedclip.com/content/repositories/placeholderapi/")
     mavenLocal()
 }
 
 dependencies {
     compileOnly(libs.bundles.idofront.core)
     compileOnly(extraLibs.geary.papermc)
+    compileOnly(extraLibs.placeholderapi)
 }
 
 java {
