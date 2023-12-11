@@ -1,7 +1,6 @@
 package com.mineinabyss.extracommands
 
-import com.mineinabyss.extracommands.commands.AfkPlayer
-import com.mineinabyss.geary.papermc.tracking.entities.toGeary
+import com.mineinabyss.extracommands.commands.afkPlayers
 import me.clip.placeholderapi.expansion.PlaceholderExpansion
 import org.bukkit.entity.Player
 import kotlin.time.toKotlinDuration
@@ -16,7 +15,7 @@ class ExtraPlaceholders : PlaceholderExpansion() {
 
     override fun onPlaceholderRequest(player: Player, identifier: String) =
         when (identifier) {
-            "afk" -> extraCommands.config.afk.takeIf { afk -> player.idleDuration.toKotlinDuration() >= afk.idleTime || player.toGeary().has<AfkPlayer>() }?.text ?: ""
+            "afk" -> extraCommands.config.afk.takeIf { afk -> player.idleDuration.toKotlinDuration() >= afk.idleTime || player.uniqueId  in afkPlayers }?.text ?: ""
             else -> null
         }
 }
