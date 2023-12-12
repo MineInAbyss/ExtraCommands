@@ -50,5 +50,10 @@ paper {
             load = PaperPluginDescription.RelativeLoadOrder.BEFORE
             joinClasspath = true
         }
+        register("PlaceholderAPI") {
+            required = true
+            load = PaperPluginDescription.RelativeLoadOrder.BEFORE
+            joinClasspath = true
+        }
     }
 }
