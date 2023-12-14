@@ -17,14 +17,7 @@ fun CommandDSLEntrypoint.seenCommand() {
             if (offlinePlayer.isOnline) return@action sender.error("A player with the name ${offlinePlayer.name} is currently online.")
 
             val timeSince = calculateTime(dateDifference(Date(offlinePlayer.lastSeen)))
-            var lastSeenTime =
-                "${timeSince.days} days ${timeSince.hours} hours ${timeSince.minutes} minutes ${timeSince.seconds} seconds"
-
-            if (timeSince.days == 0) lastSeenTime = lastSeenTime.removePrefix("0 days ")
-            if (timeSince.hours == 0L) lastSeenTime = lastSeenTime.removePrefix("0 hours ")
-            if (timeSince.minutes == 0L) lastSeenTime = lastSeenTime.removePrefix("0 minutes ")
-
-            sender.sendMessage(offlinePlayer.name + " was last seen " + lastSeenTime + " ago.")
+            sender.sendMessage(offlinePlayer.name + " was last seen " + timeSince.toString() + " ago.")
         }
     }
 }
@@ -33,9 +26,18 @@ fun seenTabComplete(args: Array<out String>) =
     extraCommands.plugin.server.onlinePlayers.map { it.name }.filter { it.startsWith(args[0]) }.takeIf { args.size == 1 } ?: emptyList()
 
 
-private class TimeSince(val days: Int, val hours: Long, val minutes: Long, val seconds: Long)
+class TimeSince(val days: Int, val hours: Long, val minutes: Long, val seconds: Long) {
+    override fun toString(): String {
+        var timeSince = "$days days $hours hours $minutes minutes $seconds seconds"
+        if (this.days == 0) timeSince = timeSince.removePrefix("0 days ")
+        if (this.hours == 0L) timeSince = timeSince.removePrefix("0 hours ")
+        if (this.minutes == 0L) timeSince = timeSince.removePrefix("0 minutes ")
 
-private fun calculateTime(s: Long): TimeSince {
+        return timeSince
+    }
+}
+
+fun calculateTime(s: Long): TimeSince {
     val days = TimeUnit.MILLISECONDS.toDays(s).toInt()
     val hours = TimeUnit.MILLISECONDS.toHours(s) - TimeUnit.DAYS.toHours(days.toLong())
     val minutes = TimeUnit.MILLISECONDS.toMinutes(s) - TimeUnit.HOURS.toMinutes(hours)
