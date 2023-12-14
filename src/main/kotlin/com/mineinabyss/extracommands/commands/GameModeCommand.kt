@@ -9,8 +9,8 @@ import org.bukkit.GameMode
 fun CommandDSLEntrypoint.gameModeCommand() {
     command("gamemode", "gm") {
         val mode: GameMode by enumArg()
-
         permission = "extracommands.gamemode.${mode.name.lowercase()}"
+
         playerAction {
             player.gameMode = mode
         }

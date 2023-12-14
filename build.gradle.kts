@@ -21,6 +21,7 @@ repositories {
 
 dependencies {
     compileOnly(libs.bundles.idofront.core)
+    compileOnly(libs.minecraft.mccoroutine)
     compileOnly(extraLibs.geary.papermc)
     compileOnly(extraLibs.placeholderapi)
 }

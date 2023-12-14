@@ -19,6 +19,7 @@ class ExtraCommandExecutor : IdofrontCommandExecutor(), TabCompleter {
         afkCommand()
         movementCommands()
         uptimeCommand()
+        scheduleRestartCommand()
 
         mineInAbyssCommands()
     }
