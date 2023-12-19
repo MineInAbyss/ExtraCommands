@@ -35,6 +35,7 @@ class ExtraCommandExecutor : IdofrontCommandExecutor(), TabCompleter {
             "personalweather", "pweather" -> personalWeatherTabComplete(args)
             "personaltime", "ptime" -> personalTimeTabComplete(args)
             "gamemode", "gm" -> gamemodeTabComplete(args)
+            "gmc", "gms", "gma", "gmsp" -> extraCommands.plugin.server.onlinePlayers.map { it.name }.filter { it.startsWith(args[0], true) }
             "hunger" -> hungerTabComplete(args)
             "god" -> godTabComplete(args)
             else -> emptyList()

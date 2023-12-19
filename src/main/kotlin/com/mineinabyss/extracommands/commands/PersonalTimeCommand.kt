@@ -20,7 +20,7 @@ fun CommandDSLEntrypoint.personalTimeCommand() {
 
 fun personalTimeTabComplete(args: Array<out String>) = when (args.size) {
     1 -> PersonalTimeType.entries.map { it.name.lowercase() }.filter { it.startsWith(args[0], true) }
-    2 -> extraCommands.plugin.server.onlinePlayers.map { it.name }.filter { it.startsWith(args[1]) }
+    2 -> extraCommands.plugin.server.onlinePlayers.map { it.name }.filter { it.startsWith(args[1], true) }
     else -> emptyList()
 }
 

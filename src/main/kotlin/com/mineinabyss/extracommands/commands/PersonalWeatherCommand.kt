@@ -31,7 +31,7 @@ fun CommandDSLEntrypoint.personalWeatherCommand() {
 
 fun personalWeatherTabComplete(args: Array<out String>) = when (args.size) {
     1 -> PersonalWeatherType.entries.map { it.name.lowercase() }.filter { it.startsWith(args[0], true) }
-    2 -> extraCommands.plugin.server.onlinePlayers.map { it.name }.filter { it.startsWith(args[1]) }
+    2 -> extraCommands.plugin.server.onlinePlayers.map { it.name }.filter { it.startsWith(args[1], true) }
     else -> emptyList()
 }
 

@@ -23,7 +23,7 @@ fun CommandDSLEntrypoint.seenCommand() {
 }
 
 fun seenTabComplete(args: Array<out String>) =
-    extraCommands.plugin.server.onlinePlayers.map { it.name }.filter { it.startsWith(args[0]) }.takeIf { args.size == 1 } ?: emptyList()
+    extraCommands.plugin.server.onlinePlayers.map { it.name }.filter { it.startsWith(args[0], true) }.takeIf { args.size == 1 } ?: emptyList()
 
 
 class TimeSince(val days: Int, val hours: Long, val minutes: Long, val seconds: Long) {
