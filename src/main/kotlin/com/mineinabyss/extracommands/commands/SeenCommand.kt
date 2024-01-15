@@ -1,19 +1,20 @@
 package com.mineinabyss.extracommands.commands
 
 import com.mineinabyss.extracommands.extraCommands
-import com.mineinabyss.idofront.commands.arguments.offlinePlayerArg
+import com.mineinabyss.idofront.commands.arguments.stringArg
 import com.mineinabyss.idofront.commands.entrypoint.CommandDSLEntrypoint
 import com.mineinabyss.idofront.messaging.error
-import org.bukkit.OfflinePlayer
+import org.bukkit.Bukkit
 import java.time.Instant
 import java.util.*
 import java.util.concurrent.TimeUnit
 
 fun CommandDSLEntrypoint.seenCommand() {
     command("seen") {
-        val offlinePlayer: OfflinePlayer by offlinePlayerArg()
+        val playerName: String by stringArg()
         action {
-            if (offlinePlayer.lastSeen == 0L) return@action sender.error("A player with the  name ${offlinePlayer.name} has never joined the server.")
+            val offlinePlayer = Bukkit.getOfflinePlayerIfCached(playerName)
+                ?: return@action sender.error("A player with the  name $playerName has never joined the server.")
             if (offlinePlayer.isOnline) return@action sender.error("A player with the name ${offlinePlayer.name} is currently online.")
 
             val timeSince = calculateTime(dateDifference(Date(offlinePlayer.lastSeen)))
@@ -23,7 +24,8 @@ fun CommandDSLEntrypoint.seenCommand() {
 }
 
 fun seenTabComplete(args: Array<out String>) =
-    extraCommands.plugin.server.onlinePlayers.map { it.name }.filter { it.startsWith(args[0], true) }.takeIf { args.size == 1 } ?: emptyList()
+    extraCommands.plugin.server.onlinePlayers.map { it.name }.filter { it.startsWith(args[0], true) }
+        .takeIf { args.size == 1 } ?: emptyList()
 
 
 class TimeSince(val days: Int, val hours: Long, val minutes: Long, val seconds: Long) {
@@ -41,7 +43,8 @@ fun calculateTime(s: Long): TimeSince {
     val days = TimeUnit.MILLISECONDS.toDays(s).toInt()
     val hours = TimeUnit.MILLISECONDS.toHours(s) - TimeUnit.DAYS.toHours(days.toLong())
     val minutes = TimeUnit.MILLISECONDS.toMinutes(s) - TimeUnit.HOURS.toMinutes(hours)
-    val seconds = TimeUnit.MILLISECONDS.toSeconds(s) - TimeUnit.HOURS.toSeconds(hours) - TimeUnit.MINUTES.toSeconds(minutes)
+    val seconds =
+        TimeUnit.MILLISECONDS.toSeconds(s) - TimeUnit.HOURS.toSeconds(hours) - TimeUnit.MINUTES.toSeconds(minutes)
     return TimeSince(days, hours, minutes, seconds)
 }
 
