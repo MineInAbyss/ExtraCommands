@@ -1,20 +1,21 @@
 package com.mineinabyss.extracommands.commands
 
 import com.mineinabyss.extracommands.extraCommands
+import com.mineinabyss.idofront.commands.arguments.offlinePlayerArg
 import com.mineinabyss.idofront.commands.arguments.stringArg
 import com.mineinabyss.idofront.commands.entrypoint.CommandDSLEntrypoint
 import com.mineinabyss.idofront.messaging.error
 import org.bukkit.Bukkit
+import org.bukkit.OfflinePlayer
 import java.time.Instant
 import java.util.*
 import java.util.concurrent.TimeUnit
 
 fun CommandDSLEntrypoint.seenCommand() {
     command("seen") {
-        val playerName: String by stringArg()
+        val offlinePlayer: OfflinePlayer by offlinePlayerArg()
         action {
-            val offlinePlayer = Bukkit.getOfflinePlayerIfCached(playerName)
-                ?: return@action sender.error("A player with the  name $playerName has never joined the server.")
+            if (offlinePlayer.lastSeen == 0L) return@action sender.error("A player with the  name ${offlinePlayer.name} has never joined the server.")
             if (offlinePlayer.isOnline) return@action sender.error("A player with the name ${offlinePlayer.name} is currently online.")
 
             val timeSince = calculateTime(dateDifference(Date(offlinePlayer.lastSeen)))
