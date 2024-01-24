@@ -13,13 +13,10 @@ fun CommandDSLEntrypoint.movementCommands() {
                 true -> {
                     player.allowFlight = false
                     player.fallDistance = 0f
-                    player.flySpeed = 0.1f
                     player.error(if (sender == player) "Flight is now disabled!" else "Flight disabled for ${player.name}")
                 }
                 false -> {
-                    val defaultSpeed = 1.0f
                     player.allowFlight = true
-                    player.flySpeed = defaultSpeed
                     player.success(if (player == sender) "Flight is now enabled!" else "Flight enabled for ${player.name}")
                 }
             }
