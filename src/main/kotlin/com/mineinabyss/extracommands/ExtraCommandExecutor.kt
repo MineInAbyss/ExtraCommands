@@ -38,6 +38,7 @@ class ExtraCommandExecutor : IdofrontCommandExecutor(), TabCompleter {
             "gmc", "gms", "gma", "gmsp" -> extraCommands.plugin.server.onlinePlayers.map { it.name }.filter { it.startsWith(args[0], true) }
             "hunger" -> hungerTabComplete(args)
             "god" -> godTabComplete(args)
+            "itemrename" -> itemRenameTabComplete(sender, args)
             else -> emptyList()
         }
     }
