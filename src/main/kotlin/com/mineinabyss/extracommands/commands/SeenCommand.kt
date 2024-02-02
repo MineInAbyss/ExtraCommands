@@ -5,6 +5,7 @@ import com.mineinabyss.idofront.commands.arguments.offlinePlayerArg
 import com.mineinabyss.idofront.commands.arguments.stringArg
 import com.mineinabyss.idofront.commands.entrypoint.CommandDSLEntrypoint
 import com.mineinabyss.idofront.messaging.error
+import com.mineinabyss.idofront.messaging.info
 import com.mineinabyss.idofront.textcomponents.miniMsg
 import org.bukkit.Bukkit
 import org.bukkit.OfflinePlayer
@@ -22,7 +23,7 @@ fun CommandDSLEntrypoint.seenCommand() {
             if (offlinePlayer.isOnline) return@action sender.error("A player with the name ${offlinePlayer.name} is currently online.")
 
             val timeSince = calculateTime(dateDifference(Date(offlinePlayer.lastSeen)))
-            sender.sendMessage(("<gold><i>" + offlinePlayer.name + "</i> was last seen " + "<yellow>" + timeSince + "</yellow> ago.").miniMsg())
+            sender.info("<gold><i>" + offlinePlayer.name + "</i> was last seen " + "<yellow>" + timeSince + "</yellow> ago.")
         }
     }
 }

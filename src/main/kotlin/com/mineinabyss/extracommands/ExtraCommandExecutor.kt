@@ -13,6 +13,7 @@ class ExtraCommandExecutor : IdofrontCommandExecutor(), TabCompleter {
         personalTimeCommand()
         gameModeCommand()
         hungerCommand()
+        healCommand()
         godCommand()
         suicideCommand()
         itemRenameCommand()
