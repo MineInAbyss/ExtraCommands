@@ -4,6 +4,7 @@ import com.github.shynixn.mccoroutine.bukkit.launch
 import com.mineinabyss.extracommands.extraCommands
 import com.mineinabyss.idofront.commands.entrypoint.CommandDSLEntrypoint
 import com.mineinabyss.idofront.textcomponents.miniMsg
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import net.kyori.adventure.title.Title
 import org.bukkit.Bukkit
@@ -12,6 +13,7 @@ import kotlin.time.Duration
 import kotlin.time.Duration.Companion.seconds
 
 fun CommandDSLEntrypoint.scheduleRestartCommand() {
+    var currentJob: Job? = null
     command("schedulerestart") {
         val delay: Duration by arg {
             parseErrorMessage = { "Please enter a valid duration, ex 1d2h3m4s for the $name" }
@@ -30,7 +32,7 @@ fun CommandDSLEntrypoint.scheduleRestartCommand() {
                     )
                 )
             }
-            extraCommands.plugin.launch {
+            currentJob = extraCommands.plugin.launch {
                 showTitle(delay, fade = true)
 
                 (delay - 10.seconds).takeIf { it.isPositive() }
@@ -43,6 +45,19 @@ fun CommandDSLEntrypoint.scheduleRestartCommand() {
 
                 Bukkit.spigot().restart()
             }
+        }
+    }
+    command("cancelrestart") {
+        action {
+            currentJob?.cancel()
+            Bukkit.getServer().clearTitle()
+            Bukkit.getServer().showTitle(
+                Title.title(
+                    "<green><bold>Server Restart Cancelled!".miniMsg(),
+                    "Server will no longer restart...".miniMsg(),
+                    Title.Times.times(ofSeconds(1), ofSeconds(5), ofSeconds(1))
+                )
+            )
         }
     }
 }
