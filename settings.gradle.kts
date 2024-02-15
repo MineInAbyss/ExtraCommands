@@ -21,7 +21,6 @@ dependencyResolutionManagement {
 
     versionCatalogs {
         create("idofrontLibs").from("com.mineinabyss:catalog:$idofrontVersion")
-        create("extraLibs").from(files("gradle/extraLibs.versions.toml"))
     }
 }
 rootProject.name = "ExtraCommands"

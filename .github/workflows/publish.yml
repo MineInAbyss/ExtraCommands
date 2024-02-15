@@ -16,8 +16,8 @@ jobs:
 
       - uses: MineInAbyss/publish-action@master
         with:
-          maven-metadata-url: https://repo.mineinabyss.com/releases/com/mineinabyss/extracommands/maven-metadata.xml
-          maven-snapshot-metadata-url: https://repo.mineinabyss.com/snapshots/com/mineinabyss/extracommands/maven-metadata.xml
+          maven-metadata-url: https://repo.mineinabyss.com/releases/com/mineinabyss/ExtraCommands/maven-metadata.xml
+          maven-snapshot-metadata-url: https://repo.mineinabyss.com/snapshots/com/mineinabyss/ExtraCommands/maven-metadata.xml
           pages-path: build/dokka/htmlMultiModule/
           dokka: dokkaHtmlMultiModule
           maven-username: ${{ secrets.MAVEN_PUBLISH_USERNAME }}
