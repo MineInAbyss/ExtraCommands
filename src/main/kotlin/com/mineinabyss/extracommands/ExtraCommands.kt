@@ -1,6 +1,7 @@
 package com.mineinabyss.extracommands
 
 import com.mineinabyss.extracommands.listeners.AfkListener
+import com.mineinabyss.extracommands.listeners.GodListener
 import com.mineinabyss.idofront.di.DI
 import com.mineinabyss.idofront.plugin.listeners
 import org.bukkit.plugin.java.JavaPlugin
@@ -12,7 +13,8 @@ class ExtraCommands : JavaPlugin() {
         ExtraCommandExecutor()
 
         listeners(
-            AfkListener()
+            AfkListener(),
+            GodListener()
         )
 
         ExtraPlaceholders().register()
