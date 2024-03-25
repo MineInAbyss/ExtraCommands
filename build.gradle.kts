@@ -8,7 +8,8 @@ plugins {
     alias(idofrontLibs.plugins.mia.publication)
     alias(idofrontLibs.plugins.mia.autoversion)
     alias(idofrontLibs.plugins.shadowjar)
-    id("net.minecrell.plugin-yml.paper") version "0.6.0"
+    //id("net.minecrell.plugin-yml.paper") version "0.6.0"
+    id("net.minecrell.plugin-yml.bukkit") version "0.6.0"
 }
 
 repositories {
@@ -31,7 +32,7 @@ java {
 }
 
 
-paper {
+bukkit {
     main = "com.mineinabyss.extracommands.ExtraCommands"
     name = "ExtraCommands"
     prefix = "ExtraCommands"
@@ -39,22 +40,5 @@ paper {
     this.version = version
     authors = listOf("boy0000")
     apiVersion = "1.20"
-
-    serverDependencies {
-        register("Idofront") {
-            required = true
-            load = PaperPluginDescription.RelativeLoadOrder.BEFORE
-            joinClasspath = true
-        }
-        register("Geary") {
-            required = true
-            load = PaperPluginDescription.RelativeLoadOrder.BEFORE
-            joinClasspath = true
-        }
-        register("PlaceholderAPI") {
-            required = true
-            load = PaperPluginDescription.RelativeLoadOrder.BEFORE
-            joinClasspath = true
-        }
-    }
+    depend = listOf("Idofront", "Geary", "PlaceholderAPI")
 }
