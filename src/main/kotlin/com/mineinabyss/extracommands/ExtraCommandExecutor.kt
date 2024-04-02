@@ -21,7 +21,6 @@ class ExtraCommandExecutor : IdofrontCommandExecutor(), TabCompleter {
         movementCommands()
         uptimeCommand()
         scheduleRestartCommand()
-        mapCommands()
 
         mineInAbyssCommands()
     }
@@ -41,7 +40,6 @@ class ExtraCommandExecutor : IdofrontCommandExecutor(), TabCompleter {
             "hunger" -> hungerTabComplete(args)
             "god" -> godTabComplete(args)
             "itemrename" -> itemRenameTabComplete(sender, args)
-            "maps" -> listOf("delete", "info")
             else -> emptyList()
         }
     }
