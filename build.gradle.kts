@@ -16,6 +16,7 @@ repositories {
     maven("https://repo.mineinabyss.com/releases")
     maven("https://repo.mineinabyss.com/snapshots")
     maven("https://repo.extendedclip.com/content/repositories/placeholderapi/")
+    maven("https://repo.william278.net/releases")
     mavenLocal()
 }
 
@@ -24,6 +25,7 @@ dependencies {
     compileOnly(idofrontLibs.minecraft.mccoroutine)
     compileOnly(libs.geary.papermc)
     compileOnly(libs.placeholderapi)
+    compileOnly(libs.huskhomes)
 }
 
 java {
@@ -52,7 +54,12 @@ paper {
             joinClasspath = true
         }
         register("PlaceholderAPI") {
-            required = true
+            required = false
+            load = PaperPluginDescription.RelativeLoadOrder.BEFORE
+            joinClasspath = true
+        }
+        register("HuskHomes") {
+            required = false
             load = PaperPluginDescription.RelativeLoadOrder.BEFORE
             joinClasspath = true
         }

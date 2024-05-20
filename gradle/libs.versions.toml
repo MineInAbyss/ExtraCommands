@@ -4,3 +4,4 @@ gearyPaper = "0.29.3"
 [libraries]
 geary-papermc = { module = "com.mineinabyss:geary-papermc", version.ref = "gearyPaper" }
 placeholderapi = "me.clip:placeholderapi:2.11.4"
+huskhomes = "net.william278.huskhomes:huskhomes-bukkit:4.6.2"
