@@ -7,7 +7,6 @@ plugins {
     alias(idofrontLibs.plugins.mia.copyjar)
     alias(idofrontLibs.plugins.mia.publication)
     alias(idofrontLibs.plugins.mia.autoversion)
-    alias(idofrontLibs.plugins.shadowjar)
     id("net.minecrell.plugin-yml.paper") version "0.6.0"
 }
 
@@ -29,7 +28,7 @@ dependencies {
 }
 
 java {
-    toolchain.languageVersion.set(JavaLanguageVersion.of(17))
+    toolchain.languageVersion.set(JavaLanguageVersion.of(21))
 }
 
 
