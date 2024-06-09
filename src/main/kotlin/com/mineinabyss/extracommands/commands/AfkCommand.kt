@@ -1,5 +1,6 @@
 package com.mineinabyss.extracommands.commands
 
+import com.mineinabyss.idofront.commands.brigadier.RootIdoCommands
 import com.mineinabyss.idofront.commands.entrypoint.CommandDSLEntrypoint
 import com.mineinabyss.idofront.commands.extensions.actions.playerAction
 import com.mineinabyss.idofront.messaging.info
@@ -18,9 +19,9 @@ fun Player.toggleAfk() = when (uniqueId in afkPlayers) {
     }
 }
 
-fun CommandDSLEntrypoint.afkCommand() {
-    command("afk") {
-        playerAction {
+fun RootIdoCommands.afkCommand() {
+    "afk" {
+        playerExecutes {
             player.info(when (player.toggleAfk()) {
                 true -> "<gray>You are now AFK"
                 false -> "<gray>You are no longer AFK"

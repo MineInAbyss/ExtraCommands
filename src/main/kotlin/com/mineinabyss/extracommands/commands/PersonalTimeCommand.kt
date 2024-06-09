@@ -3,25 +3,25 @@ package com.mineinabyss.extracommands.commands
 import com.mineinabyss.extracommands.extraCommands
 import com.mineinabyss.idofront.commands.arguments.enumArg
 import com.mineinabyss.idofront.commands.arguments.genericArg
+import com.mineinabyss.idofront.commands.brigadier.RootIdoCommands
 import com.mineinabyss.idofront.commands.entrypoint.CommandDSLEntrypoint
 import com.mineinabyss.idofront.commands.extensions.actions.playerAction
 import com.mineinabyss.idofront.messaging.success
+import com.mojang.brigadier.arguments.StringArgumentType
+import io.papermc.paper.command.brigadier.argument.ArgumentTypes
 import org.bukkit.entity.Player
 
-fun CommandDSLEntrypoint.personalTimeCommand() {
-    command("personaltime", "ptime") {
-        val time: PersonalTimeType by enumArg()
-        playerAction {
+fun RootIdoCommands.personalTimeCommand() {
+    ("personaltime" / "ptime") {
+        val time by StringArgumentType.word().suggests {
+            PersonalTimeType.entries.map { it.name.lowercase() }
+        }
+        playerExecutes {
+            val time = runCatching { PersonalTimeType.valueOf(time() ?: "") }.getOrNull() ?: return@playerExecutes
             setPlayerTime(player, time.tick)
-            player.success("Set time to $time ticks ${if (sender == player) "" else "for ${player.name}"}")
+            player.success("Set time to $time() ticks ${if (sender == player) "" else "for ${player.name}"}")
         }
     }
-}
-
-fun personalTimeTabComplete(args: Array<out String>) = when (args.size) {
-    1 -> PersonalTimeType.entries.map { it.name.lowercase() }.filter { it.startsWith(args[0], true) }
-    2 -> extraCommands.plugin.server.onlinePlayers.map { it.name }.filter { it.startsWith(args[1], true) }
-    else -> emptyList()
 }
 
 private fun setPlayerTime(player: Player, ticks: Long?) {

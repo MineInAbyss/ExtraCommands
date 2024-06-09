@@ -12,7 +12,7 @@ class ExtraCommands : JavaPlugin() {
 
     override fun onEnable() {
         createExtraCommandsContext()
-        ExtraCommandExecutor()
+        ExtraBrigadierCommands.registerCommands()
 
         listeners(
             AfkListener(),

@@ -1,14 +1,17 @@
 package com.mineinabyss.extracommands.commands
 
 import com.mineinabyss.idofront.commands.arguments.genericArg
+import com.mineinabyss.idofront.commands.brigadier.RootIdoCommands
 import com.mineinabyss.idofront.commands.entrypoint.CommandDSLEntrypoint
 import com.mineinabyss.idofront.commands.extensions.actions.playerAction
 import com.mineinabyss.idofront.messaging.error
 import com.mineinabyss.idofront.messaging.success
+import com.mojang.brigadier.arguments.DoubleArgumentType
+import com.mojang.brigadier.arguments.FloatArgumentType
 
-fun CommandDSLEntrypoint.movementCommands() {
-    command("fly") {
-        playerAction {
+fun RootIdoCommands.movementCommands() {
+    "fly" {
+        playerExecutes {
             when (player.allowFlight) {
                 true -> {
                     player.allowFlight = false
@@ -22,27 +25,27 @@ fun CommandDSLEntrypoint.movementCommands() {
             }
         }
     }
-    command("flyspeed") {
-        val speed: Double by genericArg(parseFunction = { it.toDoubleOrNull()?.div(10)?.coerceIn(0.0, 1.0) ?: 0.1 })
-        playerAction {
-            player.flySpeed = speed.toFloat()
+    "flyspeed" {
+        val speed by FloatArgumentType.floatArg(0.0f, 10.0f)
+        playerExecutes {
+            player.flySpeed = speed().div(10)
         }
     }
-    command("walkspeed") {
+    "walkspeed" {
         // Divide to normalize 1.0 as default speed
-        val speed: Double by genericArg(parseFunction = { it.toDoubleOrNull()?.div(5)?.coerceIn(0.0, 1.0) ?: 0.2 })
-        playerAction {
-            player.walkSpeed = speed.toFloat()
+        val speed by FloatArgumentType.floatArg(0.0f, 10.0f)
+        playerExecutes {
+            player.walkSpeed = speed().div(5)
         }
     }
-    command("speed") {
-        val speed: Double? by genericArg(parseFunction = { it.toDoubleOrNull() })
-        playerAction {
+    "speed" {
+        val speed by FloatArgumentType.floatArg(0.0f, 10.0f)
+        playerExecutes {
             when (player.isFlying) {
-                true -> player.flySpeed = speed?.div(10)?.coerceIn(0.0, 1.0)?.toFloat() ?: 0.1f
-                false -> player.walkSpeed = speed?.div(5)?.coerceIn(0.0, 1.0)?.toFloat() ?: 0.2f
+                true -> player.flySpeed = speed()?.div(10) ?: 0.1f
+                false -> player.walkSpeed = speed()?.div(5) ?: 0.2f
             }
-            player.success("${if (player.isFlying) "Flyspeed" else "Walkspeed"} set to ${speed ?: "default"}${if (player == sender) "" else " for ${player.name}"}")
+            player.success("${if (player.isFlying) "Flyspeed" else "Walkspeed"} set to ${speed() ?: "default"}${if (player == sender) "" else " for ${player.name}"}")
         }
     }
 }
