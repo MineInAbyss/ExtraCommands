@@ -1,6 +1,9 @@
 package com.mineinabyss.extracommands.commands
 
+import com.github.shynixn.mccoroutine.bukkit.asyncDispatcher
+import com.github.shynixn.mccoroutine.bukkit.launch
 import com.mineinabyss.extracommands.extraCommands
+import com.mineinabyss.extracommands.listeners.SeenListener
 import com.mineinabyss.idofront.commands.arguments.offlinePlayerArg
 import com.mineinabyss.idofront.commands.arguments.stringArg
 import com.mineinabyss.idofront.commands.brigadier.RootIdoCommands
@@ -10,24 +13,45 @@ import com.mineinabyss.idofront.messaging.info
 import com.mineinabyss.idofront.textcomponents.miniMsg
 import com.mojang.brigadier.arguments.StringArgumentType
 import io.papermc.paper.command.brigadier.argument.ArgumentTypes
+import kotlinx.coroutines.yield
 import org.bukkit.Bukkit
 import org.bukkit.OfflinePlayer
+import org.bukkit.entity.Player
 import java.time.Instant
 import java.util.*
 import java.util.concurrent.TimeUnit
 import kotlin.time.DurationUnit
 import kotlin.time.toDuration
 
+
 fun RootIdoCommands.seenCommand() {
     "seen" {
-        val offlinePlayer by StringArgumentType.word()
-        executes {
-            val offlinePlayer = Bukkit.getOfflinePlayer(offlinePlayer())
-            if (offlinePlayer.lastSeen == 0L) return@executes sender.error("A player with the  name ${offlinePlayer.name} has never joined the server.")
-            if (offlinePlayer.isOnline) return@executes sender.error("A player with the name ${offlinePlayer.name} is currently online.")
+        val playername by StringArgumentType.word().suggests {
+            suggest(SeenListener.previouslyOnline.toList())
+        }
+        playerExecutes {
+            val playerName = playername()!!
+            var player = Bukkit.getPlayerExact(playerName) as? OfflinePlayer
 
-            val timeSince = calculateTime(dateDifference(Date(offlinePlayer.lastSeen)))
-            sender.info("<gold><i>" + offlinePlayer.name + "</i> was last seen " + "<yellow>" + timeSince + "</yellow> ago.")
+            SeenListener.currentlyQuerying[sender]?.let {
+                return@playerExecutes sender.error("You are currently looking up another player, waiting for lookup to finish...")
+            }
+
+            if (player == null) {
+                SeenListener.currentlyQuerying[sender] = extraCommands.plugin.launch(extraCommands.plugin.asyncDispatcher) {
+                    player = Bukkit.getOfflinePlayerIfCached(playerName)
+                    if (player == null) player = Bukkit.getOfflinePlayer(playerName)
+                }.also {
+                    it.invokeOnCompletion { SeenListener.currentlyQuerying.remove(sender) }
+                }
+            }
+
+            if (player == null || player!!.lastSeen == 0L) return@playerExecutes sender.error("A player with the  name $playerName has never joined the server.")
+            if (player!!.isOnline) return@playerExecutes sender.error("A player with the name $playerName is currently online.")
+
+
+            val timeSince = calculateTime(dateDifference(Date(player!!.lastSeen)))
+            sender.info("<gold><i>$playerName</i> was last seen <yellow>$timeSince</yellow> ago.")
         }
     }
 }

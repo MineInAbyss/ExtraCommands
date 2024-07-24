@@ -3,6 +3,7 @@ package com.mineinabyss.extracommands
 import com.mineinabyss.extracommands.listeners.AfkListener
 import com.mineinabyss.extracommands.listeners.GodListener
 import com.mineinabyss.extracommands.listeners.HuskHomesListener
+import com.mineinabyss.extracommands.listeners.SeenListener
 import com.mineinabyss.idofront.di.DI
 import com.mineinabyss.idofront.plugin.Plugins
 import com.mineinabyss.idofront.plugin.listeners
@@ -16,7 +17,8 @@ class ExtraCommands : JavaPlugin() {
 
         listeners(
             AfkListener(),
-            GodListener()
+            GodListener(),
+            SeenListener()
         )
 
         if (Plugins.isEnabled("HuskHomes")) listeners(HuskHomesListener())
