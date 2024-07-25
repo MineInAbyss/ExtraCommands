@@ -46,7 +46,7 @@ fun RootIdoCommands.seenCommand() {
                 }
             }
 
-            if (player == null || player!!.lastSeen == 0L) return@playerExecutes sender.error("A player with the  name $playerName has never joined the server.")
+            if (player == null || !player!!.hasPlayedBefore()) return@playerExecutes sender.error("A player with the  name $playerName has never joined the server.")
             if (player!!.isOnline) return@playerExecutes sender.error("A player with the name $playerName is currently online.")
 
 
@@ -55,10 +55,6 @@ fun RootIdoCommands.seenCommand() {
         }
     }
 }
-
-fun seenTabComplete(args: Array<out String>) =
-    extraCommands.plugin.server.onlinePlayers.map { it.name }.filter { it.startsWith(args[0], true) }
-        .takeIf { args.size == 1 } ?: emptyList()
 
 fun calculateTime(s: Long) = s.toDuration(DurationUnit.MILLISECONDS).toComponents { days, hours, minutes, seconds, _ ->
     var timeSince = "$days days, $hours hours, $minutes minutes, $seconds seconds"
