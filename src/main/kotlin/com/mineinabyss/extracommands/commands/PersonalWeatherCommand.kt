@@ -1,17 +1,10 @@
 package com.mineinabyss.extracommands.commands
 
 import com.mineinabyss.extracommands.extraCommands
-import com.mineinabyss.idofront.commands.arguments.enumArg
-import com.mineinabyss.idofront.commands.arguments.genericArg
-import com.mineinabyss.idofront.commands.arguments.optionArg
-import com.mineinabyss.idofront.commands.arguments.playerArg
 import com.mineinabyss.idofront.commands.brigadier.RootIdoCommands
-import com.mineinabyss.idofront.commands.entrypoint.CommandDSLEntrypoint
-import com.mineinabyss.idofront.commands.extensions.actions.playerAction
 import com.mineinabyss.idofront.messaging.success
 import com.mojang.brigadier.arguments.StringArgumentType
 import org.bukkit.WeatherType
-import org.bukkit.entity.Player
 
 fun RootIdoCommands.personalWeatherCommand() {
     ("personalweather" / "pweather") {

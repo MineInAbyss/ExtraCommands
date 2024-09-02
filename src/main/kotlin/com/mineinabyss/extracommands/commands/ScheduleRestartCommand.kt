@@ -3,16 +3,14 @@ package com.mineinabyss.extracommands.commands
 import com.github.shynixn.mccoroutine.bukkit.launch
 import com.mineinabyss.extracommands.extraCommands
 import com.mineinabyss.idofront.commands.brigadier.RootIdoCommands
-import com.mineinabyss.idofront.commands.entrypoint.CommandDSLEntrypoint
 import com.mineinabyss.idofront.textcomponents.miniMsg
-import com.mineinabyss.idofront.time.inWholeTicks
 import com.mineinabyss.idofront.time.ticks
 import io.papermc.paper.command.brigadier.argument.ArgumentTypes
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import net.kyori.adventure.title.Title
 import org.bukkit.Bukkit
-import java.time.Duration.*
+import java.time.Duration.ofSeconds
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.seconds
 

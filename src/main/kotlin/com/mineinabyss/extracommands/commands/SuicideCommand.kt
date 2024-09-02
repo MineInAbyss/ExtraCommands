@@ -1,12 +1,6 @@
 package com.mineinabyss.extracommands.commands
 
-import com.mineinabyss.extracommands.extraCommands
-import com.mineinabyss.idofront.commands.arguments.enumArg
 import com.mineinabyss.idofront.commands.brigadier.RootIdoCommands
-import com.mineinabyss.idofront.commands.entrypoint.CommandDSLEntrypoint
-import com.mineinabyss.idofront.commands.extensions.actions.ensureSenderIsPlayer
-import com.mineinabyss.idofront.commands.extensions.actions.playerAction
-import org.bukkit.GameMode
 import org.bukkit.damage.DamageSource
 import org.bukkit.damage.DamageType
 import org.bukkit.entity.Player
