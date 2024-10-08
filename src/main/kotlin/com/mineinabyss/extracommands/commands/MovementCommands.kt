@@ -7,6 +7,7 @@ import com.mojang.brigadier.arguments.FloatArgumentType
 
 fun RootIdoCommands.movementCommands() {
     "fly" {
+        requiresPermission("extracommands.fly")
         playerExecutes {
             when (player.allowFlight) {
                 true -> {
@@ -22,12 +23,14 @@ fun RootIdoCommands.movementCommands() {
         }
     }
     "flyspeed" {
+        requiresPermission("extracommands.flyspeed")
         val speed by FloatArgumentType.floatArg(0.0f, 10.0f)
         playerExecutes {
             player.flySpeed = speed().div(10)
         }
     }
     "walkspeed" {
+        requiresPermission("extracommands.walkspeed")
         // Divide to normalize 1.0 as default speed
         val speed by FloatArgumentType.floatArg(0.0f, 10.0f)
         playerExecutes {
@@ -35,6 +38,7 @@ fun RootIdoCommands.movementCommands() {
         }
     }
     "speed" {
+        requiresPermission("extracommands.speed")
         val speed by FloatArgumentType.floatArg(0.0f, 10.0f)
         playerExecutes {
             when (player.isFlying) {

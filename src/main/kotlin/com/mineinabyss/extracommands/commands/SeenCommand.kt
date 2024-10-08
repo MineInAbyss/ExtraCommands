@@ -19,6 +19,7 @@ import kotlin.time.toDuration
 
 fun RootIdoCommands.seenCommand() {
     "seen" {
+        requiresPermission("extracommands.seen")
         val playername by StringArgumentType.word().suggests {
             suggest(SeenListener.previouslyOnline.toList())
         }

@@ -10,9 +10,7 @@ fun RootIdoCommands.gameModeCommand() {
         val gameMode by ArgumentTypes.gameMode().suggests {
             suggest(GameMode.entries.map { it.name.lowercase() })
         }
-        /*requires {
-            executor?.hasPermission("extracommands.gamemode.${gameMode.name.lowercase()}") == true
-        }*/
+        requiresPermission("extracommands.gamemode.${gameMode.name.lowercase()}")
         playerExecutes {
             val gameMode = gameMode() ?: return@playerExecutes
             player.gameMode = gameMode
@@ -20,36 +18,28 @@ fun RootIdoCommands.gameModeCommand() {
         }
     }
     "gmc" {
-        requires {
-            executor?.hasPermission("extracommands.gamemode.creative") == true
-        }
+        requiresPermission("extracommands.gamemode.creative")
         playerExecutes {
             player.gameMode = GameMode.CREATIVE
             sender.info("<gold>Gamemode set to <i>${GameMode.CREATIVE.name.lowercase()}</i> ${"for ${player.name}".takeIf { sender != player } ?: ""}")
         }
     }
     "gms" {
-        requires {
-            executor?.hasPermission("extracommands.gamemode.survival") == true
-        }
+        requiresPermission("extracommands.gamemode.survival")
         playerExecutes {
             player.gameMode = GameMode.SURVIVAL
             sender.info("<gold>Gamemode set to <i>${GameMode.SURVIVAL.name.lowercase()}</i> ${" or ${player.name}".takeIf { sender != player } ?: ""}")
         }
     }
     "gma" {
-        requires {
-            executor?.hasPermission("extracommands.gamemode.adventure") == true
-        }
+        requiresPermission("extracommands.gamemode.adventure")
         playerExecutes {
             player.gameMode = GameMode.ADVENTURE
             sender.info("<gold>Gamemode set to <i>${GameMode.ADVENTURE.name.lowercase()}</i> ${" for ${player.name}".takeIf { sender != player } ?: ""}")
         }
     }
     "gmsp" {
-        requires {
-            executor?.hasPermission("extracommands.gamemode.spectator") == true
-        }
+        requiresPermission("extracommands.gamemode.spectator")
         playerExecutes {
             player.gameMode = GameMode.SPECTATOR
             sender.info("<gold>Gamemode set to <i>${GameMode.SPECTATOR.name.lowercase()}</i> ${" for ${player.name}".takeIf { sender != player } ?: ""}")

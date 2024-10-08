@@ -7,6 +7,7 @@ import org.bukkit.entity.Player
 
 fun RootIdoCommands.personalTimeCommand() {
     ("personaltime" / "ptime") {
+        requiresPermission("extracommands.personaltime")
         val time by StringArgumentType.word().suggests {
             PersonalTimeType.entries.map { it.name.lowercase() }
         }

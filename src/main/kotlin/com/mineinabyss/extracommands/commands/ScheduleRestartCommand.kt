@@ -5,6 +5,7 @@ import com.mineinabyss.extracommands.extraCommands
 import com.mineinabyss.idofront.commands.brigadier.RootIdoCommands
 import com.mineinabyss.idofront.textcomponents.miniMsg
 import com.mineinabyss.idofront.time.ticks
+import com.mojang.brigadier.arguments.IntegerArgumentType
 import io.papermc.paper.command.brigadier.argument.ArgumentTypes
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -17,9 +18,10 @@ import kotlin.time.Duration.Companion.seconds
 fun RootIdoCommands.scheduleRestartCommand() {
     var currentJob: Job? = null
     "schedulerestart" {
-        val delay by ArgumentTypes.time(100)
+        requiresPermission("extracommands.schedulerestart")
+        val delay by IntegerArgumentType.integer(100)
         executes {
-            val delay = delay().ticks
+            val duration = delay().ticks
             fun showTitle(time: Duration, fade: Boolean) {
                 Bukkit.getServer().showTitle(
                     Title.title(
@@ -31,9 +33,9 @@ fun RootIdoCommands.scheduleRestartCommand() {
                 )
             }
             currentJob = extraCommands.plugin.launch {
-                showTitle(delay, fade = true)
+                showTitle(duration, fade = true)
 
-                (delay - 10.seconds).takeIf { it.isPositive() }
+                (duration - 10.seconds).takeIf { it.isPositive() }
                     ?.let { delay(it) }
 
                 repeat(10) {
@@ -46,6 +48,7 @@ fun RootIdoCommands.scheduleRestartCommand() {
         }
     }
     "cancelrestart" {
+        requiresPermission("extracommands.cancelrestart")
         executes {
             currentJob?.cancel() ?: return@executes
             Bukkit.getServer().clearTitle()

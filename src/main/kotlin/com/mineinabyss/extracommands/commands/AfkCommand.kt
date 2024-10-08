@@ -19,6 +19,7 @@ fun Player.toggleAfk() = when (uniqueId in afkPlayers) {
 
 fun RootIdoCommands.afkCommand() {
     "afk" {
+        requiresPermission("extracommands.afk")
         playerExecutes {
             player.info(when (player.toggleAfk()) {
                 true -> "<gray>You are now AFK"

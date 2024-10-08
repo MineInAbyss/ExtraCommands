@@ -6,6 +6,7 @@ import org.bukkit.attribute.Attribute
 
 fun RootIdoCommands.healCommand() {
     "heal" {
+        requiresPermission("extracommands.heal")
         playerExecutes {
             player.health = player.getAttribute(Attribute.GENERIC_MAX_HEALTH)!!.value
             player.foodLevel = 20

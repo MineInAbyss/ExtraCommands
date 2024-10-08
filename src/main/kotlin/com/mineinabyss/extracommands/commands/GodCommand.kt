@@ -6,6 +6,7 @@ import com.mineinabyss.idofront.messaging.success
 
 fun RootIdoCommands.godCommand() {
     "god" {
+        requiresPermission("extracommands.god")
         playerExecutes {
             player.isInvulnerable = !player.isInvulnerable
             player.success("God mode is now ${if (player.isInvulnerable) "on" else "off"} ${if (sender == player) "" else "for ${player.name}"}")

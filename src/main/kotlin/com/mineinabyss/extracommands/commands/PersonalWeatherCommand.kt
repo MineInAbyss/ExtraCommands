@@ -8,6 +8,7 @@ import org.bukkit.WeatherType
 
 fun RootIdoCommands.personalWeatherCommand() {
     ("personalweather" / "pweather") {
+        requiresPermission("extracommands.personalweather")
         val weather by StringArgumentType.word().suggests {
             PersonalWeatherType.entries.map { it.name.lowercase() }
         }

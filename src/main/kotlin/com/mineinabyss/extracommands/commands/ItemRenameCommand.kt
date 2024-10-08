@@ -10,6 +10,7 @@ import org.bukkit.entity.Player
 
 fun RootIdoCommands.itemRenameCommand() {
     "itemrename" {
+        requiresPermission("extracommands.itemrename")
         val renamed by StringArgumentType.greedyString().suggests {
             (context.source.executor as? Player)?.inventory?.itemInMainHand?.itemMeta?.displayName()?.serialize()?.let { suggestFiltering(it) }
         }
