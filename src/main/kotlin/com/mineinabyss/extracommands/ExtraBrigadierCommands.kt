@@ -23,6 +23,7 @@ object ExtraBrigadierCommands {
             movementCommands()
             uptimeCommand()
             scheduleRestartCommand()
+            onlineInfoCommand()
 
             mineInAbyssCommands()
         }
