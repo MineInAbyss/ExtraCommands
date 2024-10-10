@@ -5,6 +5,7 @@ plugins {
     alias(idofrontLibs.plugins.kotlinx.serialization)
     alias(idofrontLibs.plugins.mia.papermc)
     alias(idofrontLibs.plugins.mia.copyjar)
+    alias(idofrontLibs.plugins.mia.nms)
     alias(idofrontLibs.plugins.mia.publication)
     alias(idofrontLibs.plugins.mia.autoversion)
     id("net.minecrell.plugin-yml.paper") version "0.6.0"
@@ -25,6 +26,7 @@ dependencies {
     compileOnly(libs.geary.papermc)
     compileOnly(libs.placeholderapi)
     compileOnly(libs.huskhomes)
+    compileOnly(libs.maintenance)
 }
 
 java {
@@ -58,6 +60,11 @@ paper {
             joinClasspath = true
         }
         register("HuskHomes") {
+            required = false
+            load = PaperPluginDescription.RelativeLoadOrder.BEFORE
+            joinClasspath = true
+        }
+        register("Maintenance") {
             required = false
             load = PaperPluginDescription.RelativeLoadOrder.BEFORE
             joinClasspath = true
