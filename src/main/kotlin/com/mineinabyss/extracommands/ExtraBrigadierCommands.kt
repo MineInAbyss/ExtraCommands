@@ -25,6 +25,7 @@ object ExtraBrigadierCommands {
             scheduleRestartCommand()
             onlineInfoCommand()
             vanishCommand()
+            viewDistanceCommands()
 
             mineInAbyssCommands()
         }
