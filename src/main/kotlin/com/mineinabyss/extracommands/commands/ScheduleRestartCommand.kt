@@ -21,6 +21,44 @@ import kotlin.time.Duration.Companion.seconds
 //val maintenance by lazy { runCatching { MaintenanceProvider.get() as MaintenanceProxy }.getOrNull() }
 fun RootIdoCommands.scheduleRestartCommand() {
     var currentJob: Job? = null
+    "schedulestop" {
+        val delay by DurationTypeArgument(10.seconds)
+        executes {
+            val duration = delay()
+            fun showTitle(time: Duration, fade: Boolean) {
+                Bukkit.getServer().showTitle(
+                    Title.title(
+                        "<red><bold>Server Stopping".miniMsg(),
+                        "Server will stop in ${time.toComponents { d, h, m, s, _ -> "${d}d ${h}h ${m}m ${s}s" }.replace("0[a-zA-Z]\\s? ".toRegex(), "")}.".miniMsg(),
+                        if (fade) Title.Times.times(ofSeconds(1), ofSeconds(5), ofSeconds(1))
+                        else Title.Times.times(ofSeconds(0), ofSeconds(2), ofSeconds(0))
+                    )
+                )
+            }
+            currentJob = extraCommands.plugin.launch {
+                showTitle(duration, fade = true)
+
+                (duration - 10.seconds).takeIf(Duration::isPositive)?.let { delay(it) }
+
+                repeat(10) {
+                    showTitle((10 - it).seconds, fade = false)
+                    delay(1.seconds)
+                }
+
+                //val server = maintenance?.getServer("survival")
+                //val isMaintenance = maintenance?.isMaintenance(server) ?: false
+                //if (!isMaintenance) maintenance?.setMaintenanceToServer(server, true)
+                Bukkit.savePlayers()
+                Bukkit.getWorlds().forEach { world ->
+                    world.entities.forEach { e -> e.toGearyOrNull()?.encodeComponentsTo(e.persistentDataContainer) }
+                    world.save()
+                }
+                //if (!isMaintenance) maintenance?.setMaintenanceToServer(server, false)
+
+                Bukkit.shutdown()
+            }
+        }
+    }
     "schedulerestart" {
         requiresPermission("extracommands.schedulerestart")
         val delay by DurationTypeArgument(10.seconds)
