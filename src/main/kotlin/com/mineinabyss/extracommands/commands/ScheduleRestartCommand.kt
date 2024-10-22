@@ -6,6 +6,7 @@ import com.mineinabyss.geary.papermc.datastore.encodeComponentsTo
 import com.mineinabyss.geary.papermc.tracking.entities.toGearyOrNull
 import com.mineinabyss.idofront.commands.brigadier.RootIdoCommands
 import com.mineinabyss.idofront.commands.brigadier.arguments.DurationTypeArgument
+import com.mineinabyss.idofront.plugin.Plugins
 import com.mineinabyss.idofront.textcomponents.miniMsg
 import com.mineinabyss.idofront.time.ticks
 import com.mojang.brigadier.suggestion.SuggestionsBuilder
@@ -50,7 +51,9 @@ fun RootIdoCommands.scheduleRestartCommand() {
                 //if (!isMaintenance) maintenance?.setMaintenanceToServer(server, true)
                 Bukkit.savePlayers()
                 Bukkit.getWorlds().forEach { world ->
-                    world.entities.forEach { e -> e.toGearyOrNull()?.encodeComponentsTo(e.persistentDataContainer) }
+                    if (Plugins.isEnabled("Geary")) world.entities.forEach { e ->
+                        e.toGearyOrNull()?.encodeComponentsTo(e.persistentDataContainer)
+                    }
                     world.save()
                 }
                 //if (!isMaintenance) maintenance?.setMaintenanceToServer(server, false)
@@ -89,7 +92,9 @@ fun RootIdoCommands.scheduleRestartCommand() {
                 //if (!isMaintenance) maintenance?.setMaintenanceToServer(server, true)
                 Bukkit.savePlayers()
                 Bukkit.getWorlds().forEach { world ->
-                    world.entities.forEach { e -> e.toGearyOrNull()?.encodeComponentsTo(e.persistentDataContainer) }
+                    if (Plugins.isEnabled("Geary")) world.entities.forEach { e ->
+                        e.toGearyOrNull()?.encodeComponentsTo(e.persistentDataContainer)
+                    }
                     world.save()
                 }
                 //if (!isMaintenance) maintenance?.setMaintenanceToServer(server, false)
