@@ -6,11 +6,9 @@ import com.mineinabyss.geary.papermc.datastore.encodeComponentsTo
 import com.mineinabyss.geary.papermc.tracking.entities.toGearyOrNull
 import com.mineinabyss.idofront.commands.brigadier.RootIdoCommands
 import com.mineinabyss.idofront.commands.brigadier.arguments.DurationTypeArgument
+import com.mineinabyss.idofront.commands.brigadier.executes
 import com.mineinabyss.idofront.plugin.Plugins
 import com.mineinabyss.idofront.textcomponents.miniMsg
-import com.mineinabyss.idofront.time.ticks
-import com.mojang.brigadier.suggestion.SuggestionsBuilder
-import io.papermc.paper.command.brigadier.argument.ArgumentTypes
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import net.kyori.adventure.title.Title
@@ -23,9 +21,7 @@ import kotlin.time.Duration.Companion.seconds
 fun RootIdoCommands.scheduleRestartCommand() {
     var currentJob: Job? = null
     "schedulestop" {
-        val delay by DurationTypeArgument(10.seconds)
-        executes {
-            val duration = delay()
+        executes(DurationTypeArgument(10.seconds)) { duration ->
             fun showTitle(time: Duration, fade: Boolean) {
                 Bukkit.getServer().showTitle(
                     Title.title(
@@ -63,10 +59,7 @@ fun RootIdoCommands.scheduleRestartCommand() {
         }
     }
     "schedulerestart" {
-        requiresPermission("extracommands.schedulerestart")
-        val delay by DurationTypeArgument(10.seconds)
-        executes {
-            val duration = delay()
+        executes(DurationTypeArgument(10.seconds)) { duration ->
             fun showTitle(time: Duration, fade: Boolean) {
                 Bukkit.getServer().showTitle(
                     Title.title(

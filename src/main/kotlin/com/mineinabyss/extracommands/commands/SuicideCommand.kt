@@ -8,9 +8,7 @@ import org.bukkit.event.entity.EntityDamageEvent
 
 fun RootIdoCommands.suicideCommand() {
     ("suicide" / "kms") {
-        requiresPermission("extracommands.suicide")
         playerExecutes {
-            val player = sender as Player
             val event = EntityDamageEvent(player, EntityDamageEvent.DamageCause.SUICIDE, DamageSource.builder(DamageType.GENERIC_KILL).build(), Double.MAX_VALUE)
             event.callEvent()
             event.entity.lastDamageCause = event

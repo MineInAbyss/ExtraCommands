@@ -1,6 +1,7 @@
 package com.mineinabyss.extracommands.commands
 
 import com.mineinabyss.idofront.commands.brigadier.RootIdoCommands
+import com.mineinabyss.idofront.commands.brigadier.playerExecutes
 import com.mineinabyss.idofront.items.editItemMeta
 import com.mineinabyss.idofront.messaging.error
 import com.mineinabyss.idofront.textcomponents.miniMsg
@@ -10,13 +11,11 @@ import org.bukkit.entity.Player
 
 fun RootIdoCommands.itemRenameCommand() {
     "itemrename" {
-        requiresPermission("extracommands.itemrename")
-        val renamed by StringArgumentType.greedyString().suggests {
+        playerExecutes(StringArgumentType.greedyString().suggests {
             (context.source.executor as? Player)?.inventory?.itemInMainHand?.itemMeta?.displayName()?.serialize()?.let { suggestFiltering(it) }
-        }
-        playerExecutes {
+        }) { renamed ->
             player.inventory.itemInMainHand.takeIf { !it.isEmpty }?.editItemMeta {
-                displayName(renamed()?.miniMsg())
+                displayName(renamed?.miniMsg())
             } ?: sender.error("You must be holding an item to rename it!")
         }
     }

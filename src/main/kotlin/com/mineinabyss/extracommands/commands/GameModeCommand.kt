@@ -1,48 +1,40 @@
 package com.mineinabyss.extracommands.commands
 
+import com.mineinabyss.idofront.commands.brigadier.IdoCommand
+import com.mineinabyss.idofront.commands.brigadier.IdoCommand.Companion.hasPermissionRecursive
 import com.mineinabyss.idofront.commands.brigadier.RootIdoCommands
+import com.mineinabyss.idofront.commands.brigadier.executes
 import com.mineinabyss.idofront.messaging.info
 import io.papermc.paper.command.brigadier.argument.ArgumentTypes
 import org.bukkit.GameMode
+import org.bukkit.entity.Player
 
 fun RootIdoCommands.gameModeCommand() {
     ("gamemode"/  "gm") {
-        val gameMode by ArgumentTypes.gameMode().suggests {
-            suggest(GameMode.entries.map { it.name.lowercase() })
+        executes(
+            ArgumentTypes.gameMode(),
+            ArgumentTypes.players().resolve().default { listOf(executor as? Player ?: fail("Receiver must be a player")) }
+        ) { gameMode, players ->
+            players.forEach { it.gameMode = gameMode }
+            val playerString = players.filter { it != executor }.joinToString(", ") { it.name }.takeUnless { it.isEmpty() }?.let {
+                "for $it"
+            }
+            sender.info("<gold>Gamemode set to <i>${gameMode.name.lowercase()}</i> $playerString")
         }
+    }
+    fun IdoCommand.gamemodeShortcut(gameMode: GameMode) {
         requiresPermission("extracommands.gamemode.${gameMode.name.lowercase()}")
-        playerExecutes {
-            val gameMode = gameMode() ?: return@playerExecutes
-            player.gameMode = gameMode
-            sender.info("<gold>Gamemode set to <i>${gameMode.name.lowercase()}</i> ${"for ${player.name}".takeIf { sender != player } ?: ""}")
+        executes(ArgumentTypes.players().resolve().default { listOf(executor as? Player ?: fail("Receiver must be a player")) }) { players ->
+            players.forEach { it.gameMode = gameMode }
+            val playerString = players.filter { it != executor }.takeIf { it.isNotEmpty() }?.let {
+                val playerList = it.joinToString(", ") { it.name }
+                "for $playerList".plus(if (it.size > 5) "..." else "")
+            } ?: ""
+            sender.info("<gold>Gamemode set to <i>${gameMode.name.lowercase()}</i> $playerString")
         }
     }
-    "gmc" {
-        requiresPermission("extracommands.gamemode.creative")
-        playerExecutes {
-            player.gameMode = GameMode.CREATIVE
-            sender.info("<gold>Gamemode set to <i>${GameMode.CREATIVE.name.lowercase()}</i> ${"for ${player.name}".takeIf { sender != player } ?: ""}")
-        }
-    }
-    "gms" {
-        requiresPermission("extracommands.gamemode.survival")
-        playerExecutes {
-            player.gameMode = GameMode.SURVIVAL
-            sender.info("<gold>Gamemode set to <i>${GameMode.SURVIVAL.name.lowercase()}</i> ${" or ${player.name}".takeIf { sender != player } ?: ""}")
-        }
-    }
-    "gma" {
-        requiresPermission("extracommands.gamemode.adventure")
-        playerExecutes {
-            player.gameMode = GameMode.ADVENTURE
-            sender.info("<gold>Gamemode set to <i>${GameMode.ADVENTURE.name.lowercase()}</i> ${" for ${player.name}".takeIf { sender != player } ?: ""}")
-        }
-    }
-    "gmsp" {
-        requiresPermission("extracommands.gamemode.spectator")
-        playerExecutes {
-            player.gameMode = GameMode.SPECTATOR
-            sender.info("<gold>Gamemode set to <i>${GameMode.SPECTATOR.name.lowercase()}</i> ${" for ${player.name}".takeIf { sender != player } ?: ""}")
-        }
-    }
+    "gmc" { gamemodeShortcut(GameMode.CREATIVE) }
+    "gms" { gamemodeShortcut(GameMode.SURVIVAL) }
+    "gma" { gamemodeShortcut(GameMode.ADVENTURE) }
+    "gmsp" { gamemodeShortcut(GameMode.SPECTATOR) }
 }
