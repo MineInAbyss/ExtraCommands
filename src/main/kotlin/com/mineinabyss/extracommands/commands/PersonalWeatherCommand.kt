@@ -12,7 +12,9 @@ import org.bukkit.entity.Player
 
 fun RootIdoCommands.personalWeatherCommand() {
     ("personalweather" / "pweather") {
-        playerExecutes(StringArgumentType.word().suggests { PersonalWeatherType.entries.map { it.name.lowercase() } }.map( { PersonalWeatherType.valueOf(it) })) { weather ->
+        playerExecutes(StringArgumentType.word().suggests { PersonalWeatherType.entries.map { it.name.lowercase() } }
+            .map { PersonalWeatherType.entries.first { w -> w.name.lowercase() == it } }
+        ) { weather ->
             when (weather) {
                 PersonalWeatherType.RESET -> {
                     player.resetPlayerWeather()
