@@ -6,7 +6,6 @@ import com.mineinabyss.idofront.messaging.info
 private val serverStartTime = System.currentTimeMillis()
 fun RootIdoCommands.uptimeCommand() {
     "uptime" {
-        requiresPermission("extracommands.uptime")
         playerExecutes {
             val uptime = calculateTime(System.currentTimeMillis() - serverStartTime)
             player.info("<gold>Server has been up for: <yellow>$uptime")

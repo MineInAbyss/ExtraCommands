@@ -1,8 +1,7 @@
 [versions]
-gearyPaper = "0.30.21"
+gearyPaper = "0.31.0-dev.2"
 
 [libraries]
 geary-papermc = { module = "com.mineinabyss:geary-papermc", version.ref = "gearyPaper" }
 placeholderapi = "me.clip:placeholderapi:2.11.6"
-huskhomes = "net.william278.huskhomes:huskhomes-bukkit:4.6.3"
-maintenance = "eu.kennytv.maintenance:maintenance-api-proxy:4.2.1"
+huskhomes = "net.william278.huskhomes:huskhomes-bukkit:4.7"

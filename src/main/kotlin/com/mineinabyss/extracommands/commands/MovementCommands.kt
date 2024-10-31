@@ -1,14 +1,17 @@
 package com.mineinabyss.extracommands.commands
 
 import com.mineinabyss.idofront.commands.brigadier.RootIdoCommands
+import com.mineinabyss.idofront.commands.brigadier.executes
+import com.mineinabyss.idofront.commands.brigadier.playerExecutes
 import com.mineinabyss.idofront.messaging.error
 import com.mineinabyss.idofront.messaging.success
 import com.mojang.brigadier.arguments.FloatArgumentType
+import io.papermc.paper.command.brigadier.argument.ArgumentTypes
+import org.bukkit.entity.Player
 
 fun RootIdoCommands.movementCommands() {
     "fly" {
-        requiresPermission("extracommands.fly")
-        playerExecutes {
+        playerExecutes(FloatArgumentType.floatArg(0.0f, 10.0f),) { speed ->
             when (player.allowFlight) {
                 true -> {
                     player.allowFlight = false
@@ -23,29 +26,23 @@ fun RootIdoCommands.movementCommands() {
         }
     }
     "flyspeed" {
-        requiresPermission("extracommands.flyspeed")
-        val speed by FloatArgumentType.floatArg(0.0f, 10.0f)
-        playerExecutes {
-            player.flySpeed = speed().div(10)
+        playerExecutes(FloatArgumentType.floatArg(0.0f, 10.0f),) { speed ->
+            player.flySpeed = speed.div(10)
         }
     }
     "walkspeed" {
-        requiresPermission("extracommands.walkspeed")
         // Divide to normalize 1.0 as default speed
-        val speed by FloatArgumentType.floatArg(0.0f, 10.0f)
-        playerExecutes {
-            player.walkSpeed = speed().div(5)
+        playerExecutes(FloatArgumentType.floatArg(0.0f, 10.0f),) { speed ->
+            player.walkSpeed = speed.div(5)
         }
     }
     "speed" {
-        requiresPermission("extracommands.speed")
-        val speed by FloatArgumentType.floatArg(0.0f, 10.0f)
-        playerExecutes {
+        playerExecutes(FloatArgumentType.floatArg(0.0f, 10.0f),) { speed ->
             when (player.isFlying) {
-                true -> player.flySpeed = speed()?.div(10) ?: 0.1f
-                false -> player.walkSpeed = speed()?.div(5) ?: 0.2f
+                true -> player.flySpeed = speed?.div(10) ?: 0.1f
+                false -> player.walkSpeed = speed?.div(5) ?: 0.2f
             }
-            player.success("${if (player.isFlying) "Flyspeed" else "Walkspeed"} set to ${speed() ?: "default"}${if (player == sender) "" else " for ${player.name}"}")
+            player.success("${if (player.isFlying) "Flyspeed" else "Walkspeed"} set to ${speed ?: "default"}${if (player == sender) "" else " for ${player.name}"}")
         }
     }
 }

@@ -2,18 +2,19 @@ package com.mineinabyss.extracommands.commands
 
 import com.mineinabyss.extracommands.extraCommands
 import com.mineinabyss.idofront.commands.brigadier.RootIdoCommands
+import com.mineinabyss.idofront.commands.brigadier.executes
+import com.mineinabyss.idofront.commands.brigadier.playerExecutes
 import com.mineinabyss.idofront.messaging.success
 import com.mojang.brigadier.arguments.StringArgumentType
+import io.papermc.paper.command.brigadier.argument.ArgumentTypes
 import org.bukkit.WeatherType
+import org.bukkit.entity.Player
 
 fun RootIdoCommands.personalWeatherCommand() {
     ("personalweather" / "pweather") {
-        requiresPermission("extracommands.personalweather")
-        val weather by StringArgumentType.word().suggests {
-            PersonalWeatherType.entries.map { it.name.lowercase() }
-        }
-        playerExecutes {
-            val weather = runCatching { PersonalWeatherType.valueOf(weather() ?: "") }.getOrNull() ?: return@playerExecutes
+        playerExecutes(StringArgumentType.word().suggests { PersonalWeatherType.entries.map { it.name.lowercase() } }
+            .map { PersonalWeatherType.entries.first { w -> w.name.lowercase() == it } }
+        ) { weather ->
             when (weather) {
                 PersonalWeatherType.RESET -> {
                     player.resetPlayerWeather()
@@ -26,12 +27,6 @@ fun RootIdoCommands.personalWeatherCommand() {
             }
         }
     }
-}
-
-fun personalWeatherTabComplete(args: Array<out String>) = when (args.size) {
-    1 -> PersonalWeatherType.entries.map { it.name.lowercase() }.filter { it.startsWith(args[0], true) }
-    2 -> extraCommands.plugin.server.onlinePlayers.map { it.name }.filter { it.startsWith(args[1], true) }
-    else -> emptyList()
 }
 
 private enum class PersonalWeatherType {

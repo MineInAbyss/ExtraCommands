@@ -5,6 +5,7 @@ import com.github.shynixn.mccoroutine.bukkit.launch
 import com.mineinabyss.extracommands.extraCommands
 import com.mineinabyss.extracommands.listeners.SeenListener
 import com.mineinabyss.idofront.commands.brigadier.RootIdoCommands
+import com.mineinabyss.idofront.commands.brigadier.executes
 import com.mineinabyss.idofront.messaging.error
 import com.mineinabyss.idofront.messaging.info
 import com.mojang.brigadier.arguments.StringArgumentType
@@ -19,33 +20,29 @@ import kotlin.time.toDuration
 
 fun RootIdoCommands.seenCommand() {
     "seen" {
-        requiresPermission("extracommands.seen")
-        val playername by StringArgumentType.word().suggests {
-            suggest(SeenListener.previouslyOnline.toList())
-        }
-        playerExecutes {
-            val playerName = playername()!!
-            var player = Bukkit.getPlayerExact(playerName) as? OfflinePlayer
+        executes(StringArgumentType.word().suggests { suggest(SeenListener.previouslyOnline.toList()) }) { player ->
+            var offlinePlayer = Bukkit.getPlayerExact(player) as? OfflinePlayer
 
             SeenListener.currentlyQuerying[sender]?.let {
-                return@playerExecutes sender.error("You are currently looking up another player, waiting for lookup to finish...")
+                return@executes sender.error("You are currently looking up another player, waiting for lookup to finish...")
             }
 
-            if (player == null) {
-                SeenListener.currentlyQuerying[sender] = extraCommands.plugin.launch(extraCommands.plugin.asyncDispatcher) {
-                    player = Bukkit.getOfflinePlayerIfCached(playerName)
-                    if (player == null) player = Bukkit.getOfflinePlayer(playerName)
-                }.also {
-                    it.invokeOnCompletion { SeenListener.currentlyQuerying.remove(sender) }
-                }
+            if (offlinePlayer == null) {
+                SeenListener.currentlyQuerying[sender] =
+                    extraCommands.plugin.launch(extraCommands.plugin.asyncDispatcher) {
+                        offlinePlayer = Bukkit.getOfflinePlayerIfCached(player)
+                        if (offlinePlayer == null) offlinePlayer = Bukkit.getOfflinePlayer(player)
+                    }.also {
+                        it.invokeOnCompletion { SeenListener.currentlyQuerying.remove(sender) }
+                    }
             }
 
-            if (player == null || !player!!.hasPlayedBefore()) return@playerExecutes sender.error("A player with the  name $playerName has never joined the server.")
-            if (player!!.isOnline) return@playerExecutes sender.error("A player with the name $playerName is currently online.")
+            if (offlinePlayer == null || !offlinePlayer!!.hasPlayedBefore()) return@executes sender.error("A player with the  name $player has never joined the server.")
+            if (offlinePlayer!!.isOnline) return@executes sender.error("A player with the name $player is currently online.")
 
 
-            val timeSince = calculateTime(dateDifference(Date(player!!.lastSeen)))
-            sender.info("<gold><i>$playerName</i> was last seen <yellow>$timeSince</yellow> ago.")
+            val timeSince = calculateTime(dateDifference(Date(offlinePlayer!!.lastSeen)))
+            sender.info("<gold><i>$player</i> was last seen <yellow>$timeSince</yellow> ago.")
         }
     }
 }

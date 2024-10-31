@@ -26,7 +26,6 @@ dependencies {
     compileOnly(libs.geary.papermc)
     compileOnly(libs.placeholderapi)
     compileOnly(libs.huskhomes)
-    compileOnly(libs.maintenance)
 }
 
 java {

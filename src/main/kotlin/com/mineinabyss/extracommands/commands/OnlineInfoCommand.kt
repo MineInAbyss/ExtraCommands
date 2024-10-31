@@ -7,7 +7,6 @@ import org.bukkit.attribute.Attribute
 
 fun RootIdoCommands.onlineInfoCommand() {
     "online" {
-        requiresPermission("extracommands.online")
         executes {
             sender.info("<gold>There are ${Bukkit.getOnlinePlayers().size} players online right now!")
         }
