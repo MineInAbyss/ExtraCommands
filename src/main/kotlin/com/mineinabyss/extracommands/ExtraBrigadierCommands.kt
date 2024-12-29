@@ -22,7 +22,7 @@ object ExtraBrigadierCommands {
             onlineInfoCommand()
             vanishCommand()
             viewDistanceCommands()
-
+            nightVisionCommand()
             mineInAbyssCommands()
         }
     }
