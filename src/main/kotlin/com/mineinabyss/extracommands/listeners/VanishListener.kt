@@ -12,11 +12,12 @@ class VanishListener : Listener {
 
     @EventHandler
     fun PlayerJoinEvent.onJoin() {
+        if (player.uniqueId in vanishedPlayers) joinMessage(null)
         vanishedPlayers.mapNotNull { it.toPlayer() }.forEach { player.hidePlayer(extraCommands.plugin, it) }
     }
 
     @EventHandler
     fun PlayerQuitEvent.onQuit() {
-        vanishedPlayers -= player.uniqueId
+        if (player.uniqueId in vanishedPlayers) quitMessage(null)
     }
 }
