@@ -13,9 +13,9 @@ fun RootIdoCommands.itemRenameCommand() {
     "itemrename" {
         playerExecutes(StringArgumentType.greedyString().suggests {
             (context.source.executor as? Player)?.inventory?.itemInMainHand?.itemMeta?.displayName()?.serialize()?.let { suggestFiltering(it) }
-        }) { renamed ->
+        }.default { "" }) { renamed ->
             player.inventory.itemInMainHand.takeIf { !it.isEmpty }?.editItemMeta {
-                displayName(renamed?.miniMsg())
+                displayName(renamed?.takeIf { it.isNotEmpty() }?.miniMsg())
             } ?: sender.error("You must be holding an item to rename it!")
         }
     }
