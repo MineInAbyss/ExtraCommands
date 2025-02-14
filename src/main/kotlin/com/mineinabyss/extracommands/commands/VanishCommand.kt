@@ -11,18 +11,18 @@ import org.bukkit.entity.Player
 import java.util.UUID
 
 val vanishedPlayers = mutableSetOf<UUID>()
-fun Player.toggleVanish() = when (uniqueId in vanishedPlayers) {
-    true -> {
+fun Player.toggleVanish() = (uniqueId in vanishedPlayers).also { vanished ->
+    if (vanished) {
         vanishedPlayers -= uniqueId
         Bukkit.getOnlinePlayers().forEach { it.showPlayer(extraCommands.plugin, this) }
-        false
-    }
-    false -> {
+    } else {
         vanishedPlayers += uniqueId
-        Bukkit.getOnlinePlayers().forEach { it.hidePlayer(extraCommands.plugin, this) }
-        true
+        Bukkit.getOnlinePlayers().filter { it.uniqueId !in vanishedPlayers }.forEach {
+            it.hidePlayer(extraCommands.plugin, this)
+        }
+        vanishedPlayers.mapNotNull(Bukkit::getPlayer).forEach { this.showPlayer(extraCommands.plugin, it) }
     }
-}
+}.not()
 
 fun RootIdoCommands.vanishCommand() {
     "vanish" {

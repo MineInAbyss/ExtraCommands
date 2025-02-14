@@ -23,23 +23,18 @@ fun RootIdoCommands.seenCommand() {
         executes(StringArgumentType.word().suggests { suggest(SeenListener.previouslyOnline.toList()) }) { player ->
             var offlinePlayer = Bukkit.getPlayerExact(player) as? OfflinePlayer
 
-            SeenListener.currentlyQuerying[sender]?.let {
+            SeenListener.currentlyQuerying[sender]?.also {
                 return@executes sender.error("You are currently looking up another player, waiting for lookup to finish...")
             }
 
             if (offlinePlayer == null) {
-                SeenListener.currentlyQuerying[sender] =
-                    extraCommands.plugin.launch(extraCommands.plugin.asyncDispatcher) {
-                        offlinePlayer = Bukkit.getOfflinePlayerIfCached(player)
-                        if (offlinePlayer == null) offlinePlayer = Bukkit.getOfflinePlayer(player)
-                    }.also {
-                        it.invokeOnCompletion { SeenListener.currentlyQuerying.remove(sender) }
-                    }
+                SeenListener.currentlyQuerying[sender] = extraCommands.plugin.launch(extraCommands.plugin.asyncDispatcher) {
+                    offlinePlayer = Bukkit.getOfflinePlayerIfCached(player) ?: Bukkit.getOfflinePlayer(player)
+                }.also { it.invokeOnCompletion { SeenListener.currentlyQuerying.remove(sender) } }
             }
 
-            if (offlinePlayer == null || !offlinePlayer!!.hasPlayedBefore()) return@executes sender.error("A player with the  name $player has never joined the server.")
+            if (offlinePlayer?.hasPlayedBefore() != true) return@executes sender.error("A player with the  name $player has never joined the server.")
             if (offlinePlayer!!.isOnline) return@executes sender.error("A player with the name $player is currently online.")
-
 
             val timeSince = calculateTime(dateDifference(Date(offlinePlayer!!.lastSeen)))
             sender.info("<gold><i>$player</i> was last seen <yellow>$timeSince</yellow> ago.")
