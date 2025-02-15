@@ -21,28 +21,34 @@ class VanishListener : Listener {
 
     @EventHandler
     fun PlayerJoinEvent.onJoin() {
+        val joinMsg = joinMessage() ?: return
+        if (player.uniqueId in vanishedPlayers) joinMessage(null)
         Bukkit.getOnlinePlayers().forEach {
             if (it.uniqueId !in vanishedPlayers && !it.hasPermission(bypassPermission)) return@forEach
-            it.sendMessage(joinMessage()!!)
+            it.sendMessage(joinMsg)
         }
         vanishedPlayers.mapNotNull(Bukkit::getPlayer).forEach { player.hidePlayer(extraCommands.plugin, it) }
     }
 
     @EventHandler
     fun PlayerQuitEvent.onQuit() {
-        if (player.uniqueId !in vanishedPlayers || quitMessage() == null) return
+        val quitMsg = quitMessage() ?: return
+        if (player.uniqueId !in vanishedPlayers) return
+        quitMessage(null)
         Bukkit.getOnlinePlayers().forEach {
             if (it.uniqueId !in vanishedPlayers && !it.hasPermission(bypassPermission)) return@forEach
-            it.sendMessage(quitMessage()!!)
+            it.sendMessage(quitMsg)
         }
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
     fun PlayerDeathEvent.onDeath() {
-        if (player.uniqueId !in vanishedPlayers || deathMessage() == null) return
+        val deathMsg = deathMessage() ?: return
+        if (player.uniqueId !in vanishedPlayers) return
+        deathMessage(null)
         Bukkit.getOnlinePlayers().forEach {
             if (it.uniqueId !in vanishedPlayers && !it.hasPermission(bypassPermission)) return@forEach
-            it.sendMessage(deathMessage()!!)
+            it.sendMessage(deathMsg)
         }
     }
 
