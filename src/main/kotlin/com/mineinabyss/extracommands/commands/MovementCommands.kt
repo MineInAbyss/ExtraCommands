@@ -11,7 +11,7 @@ import org.bukkit.entity.Player
 
 fun RootIdoCommands.movementCommands() {
     "fly" {
-        playerExecutes(FloatArgumentType.floatArg(0.0f, 10.0f).default{(-1).toFloat()},) { speed ->
+        playerExecutes(FloatArgumentType.floatArg(0.0f, 10.0f).default{(-1).toFloat()}) { speed ->
             when (player.allowFlight) {
                 true -> {
                     player.allowFlight = false
