@@ -16,11 +16,11 @@ fun RootIdoCommands.movementCommands() {
                 true -> {
                     player.allowFlight = false
                     player.fallDistance = 0f
-                    player.flySpeed = speed.div(10)
                     player.error(if (sender == player) "Flight is now disabled!" else "Flight disabled for ${player.name}")
                 }
                 false -> {
                     player.allowFlight = true
+                    player.flySpeed = speed.div(10)
                     player.success(if (player == sender) "Flight is now enabled!" else "Flight enabled for ${player.name}")
                 }
             }
