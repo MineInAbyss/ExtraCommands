@@ -11,11 +11,12 @@ import org.bukkit.entity.Player
 
 fun RootIdoCommands.movementCommands() {
     "fly" {
-        playerExecutes(FloatArgumentType.floatArg(0.0f, 10.0f),) { speed ->
+        playerExecutes(FloatArgumentType.floatArg(0.0f, 10.0f).default{1.0.toFloat()},) { speed ->
             when (player.allowFlight) {
                 true -> {
                     player.allowFlight = false
                     player.fallDistance = 0f
+                    player.flySpeed = speed.div(10)
                     player.error(if (sender == player) "Flight is now disabled!" else "Flight disabled for ${player.name}")
                 }
                 false -> {
