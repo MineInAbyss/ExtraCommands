@@ -11,7 +11,7 @@ import org.bukkit.entity.Player
 
 fun RootIdoCommands.movementCommands() {
     "fly" {
-        playerExecutes(FloatArgumentType.floatArg(0.0f, 10.0f),) { speed ->
+        playerExecutes(FloatArgumentType.floatArg(0.0f, 10.0f).default{(-1).toFloat()}) { speed ->
             when (player.allowFlight) {
                 true -> {
                     player.allowFlight = false
@@ -20,6 +20,8 @@ fun RootIdoCommands.movementCommands() {
                 }
                 false -> {
                     player.allowFlight = true
+                    if (speed != (-1).toFloat()) // Only apply fly speed change when specified by player
+                        player.flySpeed = speed.div(10)
                     player.success(if (player == sender) "Flight is now enabled!" else "Flight enabled for ${player.name}")
                 }
             }
