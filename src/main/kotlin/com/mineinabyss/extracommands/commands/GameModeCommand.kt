@@ -10,16 +10,10 @@ import org.bukkit.entity.Player
 
 fun RootIdoCommands.gameModeCommand() {
     fun IdoCommand.gamemodeShortcut(gameMode: GameMode) {
-        requiresPermission("extracommands.gamemode.creative")
-        executes(
-            ArgumentTypes.players().resolve()
-                .default { listOf(executor as? Player ?: fail("Receiver must be a player")) }) { players ->
-            players.forEach { it.gameMode = gameMode }
-            val playerString = players.filter { it != executor }.takeIf { it.isNotEmpty() }?.let {
-                val playerList = it.joinToString(", ") { it.name }
-                "for $playerList".plus(if (it.size > 5) "..." else "")
-            } ?: ""
-            sender.info("<gold>Gamemode set to <i>${gameMode.name.lowercase()}</i> $playerString")
+        requiresPermission("extracommands.gamemode.${gameMode.name.lowercase()}")
+        playerExecutes {
+            player.gameMode = gameMode
+            sender.info("<gold>Gamemode set to <i>${gameMode.name.lowercase()}</i>")
         }
     }
     ("gamemode" / "gm") { GameMode.entries.forEach { it.name.lowercase().invoke { gamemodeShortcut(it) } } }
