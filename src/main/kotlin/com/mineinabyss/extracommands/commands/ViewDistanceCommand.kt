@@ -1,5 +1,7 @@
 package com.mineinabyss.extracommands.commands
 
+import ca.spottedleaf.moonrise.common.PlatformHooks
+import ca.spottedleaf.moonrise.common.util.MoonriseConstants
 import com.github.shynixn.mccoroutine.bukkit.launch
 import com.mineinabyss.extracommands.extraCommands
 import com.mineinabyss.idofront.commands.brigadier.RootIdoCommands
@@ -18,7 +20,7 @@ fun RootIdoCommands.viewDistanceCommands() {
     "viewdistance" {
         executes(
             ArgumentTypes.players().resolve(),
-            IntegerArgumentType.integer(0, 32).named("viewDistance").default { 0 },
+            IntegerArgumentType.integer(0, MoonriseConstants.MAX_VIEW_DISTANCE).named("viewDistance").default { 0 },
             DurationTypeArgument(1.seconds).named("duration").default { Duration.INFINITE }
         ) { players, viewDistance, duration, ->
             if (viewDistance == 0 && duration == Duration.INFINITE) {
