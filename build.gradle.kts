@@ -24,6 +24,7 @@ dependencies {
     compileOnly(idofrontLibs.bundles.idofront.core)
     compileOnly(idofrontLibs.minecraft.mccoroutine)
     compileOnly(libs.geary.papermc)
+    compileOnly(libs.chatty)
     compileOnly(libs.placeholderapi)
     compileOnly(libs.huskhomes)
 }

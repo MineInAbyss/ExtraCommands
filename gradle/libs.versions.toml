@@ -1,7 +1,9 @@
 [versions]
-gearyPaper = "0.32.6"
+gearyPaper = "0.33.0"
+chatty = "0.9.1"
 
 [libraries]
 geary-papermc = { module = "com.mineinabyss:geary-papermc", version.ref = "gearyPaper" }
+chatty = { module = "com.mineinabyss:chatty-paper", version.ref = "chatty" }
 placeholderapi = "me.clip:placeholderapi:2.11.6"
 huskhomes = "net.william278.huskhomes:huskhomes-bukkit:4.9.8"
