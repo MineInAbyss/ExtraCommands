@@ -13,4 +13,10 @@ fun RootIdoCommands.mineInAbyssCommands() {
             """.trimIndent())
         }
     }
+    "modpack" {
+        requiresPermission("")
+        playerExecutes {
+            player.info("<#00AF5C>You can download the Official MineInAbyss modpack from Modrinth by clicking <b><u><click:open_url:'https://outline.mineinabyss.com/s/home/doc/modpack-VbxUNQ4ztj'>here!</click>")
+        }
+    }
 }
