@@ -24,6 +24,7 @@ object ExtraBrigadierCommands {
             viewDistanceCommands()
             nightVisionCommand()
             expCommand()
+            chunkCommands()
             mineInAbyssCommands()
         }
     }
