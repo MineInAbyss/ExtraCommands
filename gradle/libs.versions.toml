@@ -1,5 +1,5 @@
 [versions]
-gearyPaper = "0.33.2"
+gearyPaper = "0.33.14"
 chatty = "0.9.1"
 
 [libraries]
