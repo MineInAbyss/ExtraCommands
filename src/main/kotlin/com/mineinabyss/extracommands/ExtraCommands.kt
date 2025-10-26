@@ -1,10 +1,12 @@
 package com.mineinabyss.extracommands
 
+import com.mineinabyss.extracommands.dailyrestarts.RestartManager
 import com.mineinabyss.extracommands.listeners.AfkListener
 import com.mineinabyss.extracommands.listeners.GodListener
 import com.mineinabyss.extracommands.listeners.HuskHomesListener
 import com.mineinabyss.extracommands.listeners.SeenListener
 import com.mineinabyss.extracommands.listeners.VanishListener
+import com.mineinabyss.idofront.config.config
 import com.mineinabyss.idofront.di.DI
 import com.mineinabyss.idofront.plugin.Plugins
 import com.mineinabyss.idofront.plugin.listeners
@@ -15,6 +17,8 @@ class ExtraCommands : JavaPlugin() {
     override fun onEnable() {
         createExtraCommandsContext()
         ExtraBrigadierCommands.registerCommands()
+
+        extraCommands.restartManager.scheduleDailyRestartIfEnabled()
 
         listeners(
             AfkListener(),
@@ -32,7 +36,8 @@ class ExtraCommands : JavaPlugin() {
         DI.remove<ExtraCommandContext>()
         DI.add<ExtraCommandContext>(object : ExtraCommandContext {
             override val plugin = this@ExtraCommands
-            override val config = ExtraConfig()
+            override val config by config("config", dataFolder.toPath(), ExtraConfig())
+            override val restartManager: RestartManager = RestartManager(config.dailyRestarts)
         })
     }
 }

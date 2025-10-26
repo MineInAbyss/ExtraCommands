@@ -1,9 +1,11 @@
 package com.mineinabyss.extracommands
 
+import com.mineinabyss.extracommands.dailyrestarts.RestartManager
 import com.mineinabyss.idofront.di.DI
 
 val extraCommands by DI.observe<ExtraCommandContext>()
 interface ExtraCommandContext {
     val plugin: ExtraCommands
     val config: ExtraConfig
+    val restartManager: RestartManager
 }
