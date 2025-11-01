@@ -32,6 +32,12 @@ class RestartManager(
             .withMinute(config.minute)
             .withSecond(0)
             .let { if (now > it) it.plusDays(1) else it }
+            .let { nextTime ->
+                val timeUntilNextRun = Duration.between(now, nextTime)
+                if (timeUntilNextRun.toKotlinDuration() < config.skipIfUptimeLessThan)
+                    nextTime.plusDays(1)
+                else nextTime
+            }
         val delay = Duration.between(now, nextRun).toKotlinDuration()
         println("Scheduling daily restart at $nextRun (in $delay)")
         dailyRestartJob?.cancel()
@@ -54,8 +60,7 @@ class RestartManager(
     }
 
     fun delayToString(duration: kotlin.time.Duration) = duration
-        .toComponents { d, h, m, s, _ -> "${d}d ${h}h ${m}m ${s}s" }
-        .replace("0[a-zA-Z]\\s? ".toRegex(), "")
+        .toString()
 
     fun scheduleStop(showTitleAtStart: Boolean, duration: kotlin.time.Duration) {
         currentJob?.cancel()
@@ -126,21 +131,21 @@ class RestartManager(
             }
         }
 
-        mark(30.minutes, {
+        mark(30.minutes) {
             Bukkit.getServer().sendMessage(earlyWarning(rem).miniMsg())
-        })
+        }
 
-        mark(10.minutes, {
+        mark(10.minutes) {
             Bukkit.getServer().sendMessage(earlyWarning(rem).miniMsg())
-        })
+        }
 
-        mark(1.minutes, {
+        mark(1.minutes) {
             Bukkit.getServer().sendMessage(earlyWarning(rem).miniMsg())
-        })
+        }
 
-        mark(30.seconds, {
+        mark(30.seconds) {
             Bukkit.getServer().sendMessage(earlyWarning(rem).miniMsg())
-        })
+        }
 
 
         // Always show last 10 second countdown
