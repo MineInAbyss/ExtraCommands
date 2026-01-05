@@ -21,7 +21,7 @@ fun RootIdoCommands.viewDistanceCommands() {
         executes(
             ArgumentTypes.players().resolve(),
             IntegerArgumentType.integer(0, MoonriseConstants.MAX_VIEW_DISTANCE).named("viewDistance").default { 0 },
-            DurationTypeArgument(1.seconds).named("duration").default { Duration.INFINITE }
+            DurationTypeArgument(1.seconds)
         ) { players, viewDistance, duration, ->
             if (viewDistance == 0 && duration == Duration.INFINITE) {
                 val viewDistances = players.groupBy { it.viewDistance }.entries.sortedBy { it.value.size }
@@ -53,7 +53,7 @@ fun RootIdoCommands.viewDistanceCommands() {
         executes(
             ArgumentTypes.players().resolve(),
             IntegerArgumentType.integer(0, MoonriseConstants.MAX_VIEW_DISTANCE).named("simulationDistance").default { 0 },
-            DurationTypeArgument(1.seconds).named("duration").default { Duration.INFINITE }
+            DurationTypeArgument(1.seconds)
         ) { players, simulationDistance, duration ->
             if (simulationDistance == 0 && duration == Duration.INFINITE) {
                 val simulationDistances = players.groupBy { it.simulationDistance }.entries.sortedBy { it.value.size }
