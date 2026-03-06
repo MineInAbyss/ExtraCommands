@@ -23,4 +23,4 @@ dependencyResolutionManagement {
         create("idofrontLibs").from("com.mineinabyss:catalog:$idofrontVersion")
     }
 }
-rootProject.name = "ExtraCommands"
+rootProject.name = "extracommands"
