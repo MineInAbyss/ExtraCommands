@@ -17,12 +17,12 @@ class HuskHomesListener : Listener {
 
     @EventHandler
     fun TeleportEvent.onTeleport() {
-        val teleporter = Bukkit.getPlayer(teleport.teleporter.username) ?: return
-        val onlineUser = huskHomes.getOnlineUserExact((teleport.target as? Username)?.username ?: return).getOrNull() ?: return
+        val teleporter = Bukkit.getPlayer(teleport.teleporter.name) ?: return
+        val onlineUser = huskHomes.getOnlineUserExact((teleport.target as? Username)?.name ?: return).getOrNull() ?: return
         val savedUser = huskHomes.getSavedUser(onlineUser).getOrNull() ?: return
         if (teleporter.hasPermission(TELEPORT_IGNORE_BYPASS) || teleporter.isOp) return
 
         if (savedUser.isIgnoringTeleports) isCancelled = true
-        teleporter.error("${onlineUser.username} has disabled teleports...")
+        teleporter.error("${onlineUser.name} has disabled teleports...")
     }
 }

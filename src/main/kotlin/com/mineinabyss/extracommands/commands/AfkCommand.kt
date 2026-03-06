@@ -7,7 +7,8 @@ import io.papermc.paper.command.brigadier.argument.ArgumentTypes
 import org.bukkit.entity.Player
 import java.util.*
 
-val afkPlayers = mutableSetOf<UUID>()
+internal val afkPlayers = mutableSetOf<UUID>()
+val Player.isAfk get() = uniqueId in afkPlayers
 fun Player.toggleAfk() = when (uniqueId in afkPlayers) {
     true -> {
         afkPlayers -= uniqueId
