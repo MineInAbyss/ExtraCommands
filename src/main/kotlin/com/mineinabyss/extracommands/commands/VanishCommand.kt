@@ -1,8 +1,7 @@
 package com.mineinabyss.extracommands.commands
 
 import com.mineinabyss.extracommands.extraCommands
-import com.mineinabyss.idofront.commands.brigadier.RootIdoCommands
-import com.mineinabyss.idofront.commands.brigadier.executes
+import com.mineinabyss.idofront.commands.brigadier.*
 import com.mineinabyss.idofront.messaging.info
 import com.mojang.brigadier.StringReader
 import io.papermc.paper.command.brigadier.argument.ArgumentTypes
@@ -26,8 +25,8 @@ fun Player.toggleVanish() = (uniqueId in vanishedPlayers).also { vanished ->
 
 fun RootIdoCommands.vanishCommand() {
     "vanish" {
-        requiresPermission("extracommands.vanish")
-        playerExecutes {
+        permission = "extracommands.vanish"
+        executes.asPlayer {
             player.info(when (player.toggleVanish()) {
                 true -> "<gray>You are now Vanished"
                 false -> "<gray>You are no longer Vanished"

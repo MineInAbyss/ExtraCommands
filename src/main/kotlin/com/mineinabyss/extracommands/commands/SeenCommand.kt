@@ -4,8 +4,7 @@ import com.github.shynixn.mccoroutine.bukkit.asyncDispatcher
 import com.github.shynixn.mccoroutine.bukkit.launch
 import com.mineinabyss.extracommands.extraCommands
 import com.mineinabyss.extracommands.listeners.SeenListener
-import com.mineinabyss.idofront.commands.brigadier.RootIdoCommands
-import com.mineinabyss.idofront.commands.brigadier.executes
+import com.mineinabyss.idofront.commands.brigadier.*
 import com.mineinabyss.idofront.messaging.error
 import com.mineinabyss.idofront.messaging.info
 import com.mojang.brigadier.arguments.StringArgumentType
@@ -20,11 +19,11 @@ import kotlin.time.toDuration
 
 fun RootIdoCommands.seenCommand() {
     "seen" {
-        executes(StringArgumentType.word().suggests { suggest(SeenListener.previouslyOnline.toList()) }) { player ->
+        executes.args("player" to StringArgumentType.word().suggests { suggest(SeenListener.previouslyOnline.toList()) }) { player ->
             var offlinePlayer = Bukkit.getPlayerExact(player) as? OfflinePlayer
 
             SeenListener.currentlyQuerying[sender]?.also {
-                return@executes sender.error("You are currently looking up another player, waiting for lookup to finish...")
+                return@args sender.error("You are currently looking up another player, waiting for lookup to finish...")
             }
 
             if (offlinePlayer == null) {
@@ -33,8 +32,8 @@ fun RootIdoCommands.seenCommand() {
                 }.also { it.invokeOnCompletion { SeenListener.currentlyQuerying.remove(sender) } }
             }
 
-            if (offlinePlayer?.hasPlayedBefore() != true) return@executes sender.error("A player with the  name $player has never joined the server.")
-            if (offlinePlayer!!.isOnline) return@executes sender.error("A player with the name $player is currently online.")
+            if (offlinePlayer?.hasPlayedBefore() != true) return@args sender.error("A player with the  name $player has never joined the server.")
+            if (offlinePlayer!!.isOnline) return@args sender.error("A player with the name $player is currently online.")
 
             val timeSince = calculateTime(dateDifference(Date(offlinePlayer!!.lastSeen)))
             sender.info("<gold><i>$player</i> was last seen <yellow>$timeSince</yellow> ago.")

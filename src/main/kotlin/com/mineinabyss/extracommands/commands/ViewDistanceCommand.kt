@@ -4,9 +4,8 @@ import ca.spottedleaf.moonrise.common.PlatformHooks
 import ca.spottedleaf.moonrise.common.util.MoonriseConstants
 import com.github.shynixn.mccoroutine.bukkit.launch
 import com.mineinabyss.extracommands.extraCommands
-import com.mineinabyss.idofront.commands.brigadier.RootIdoCommands
+import com.mineinabyss.idofront.commands.brigadier.*
 import com.mineinabyss.idofront.commands.brigadier.arguments.DurationTypeArgument
-import com.mineinabyss.idofront.commands.brigadier.executes
 import com.mineinabyss.idofront.messaging.success
 import com.mojang.brigadier.arguments.IntegerArgumentType
 import io.papermc.paper.command.brigadier.argument.ArgumentTypes
@@ -18,10 +17,10 @@ import kotlin.time.Duration.Companion.seconds
 fun RootIdoCommands.viewDistanceCommands() {
 
     "viewdistance" {
-        executes(
-            ArgumentTypes.players().resolve(),
-            IntegerArgumentType.integer(0, MoonriseConstants.MAX_VIEW_DISTANCE).named("viewDistance").default { 0 },
-            DurationTypeArgument(1.seconds)
+        executes.args(
+            "players" to ArgumentTypes.players().resolve(),
+            "viewDistance" to IntegerArgumentType.integer(0, MoonriseConstants.MAX_VIEW_DISTANCE).default { 0 },
+            "duration" to DurationTypeArgument(1.seconds).default { Duration.INFINITE }
         ) { players, viewDistance, duration, ->
             if (viewDistance == 0 && duration == Duration.INFINITE) {
                 val viewDistances = players.groupBy { it.viewDistance }.entries.sortedBy { it.value.size }
@@ -50,10 +49,10 @@ fun RootIdoCommands.viewDistanceCommands() {
     }
 
     "simulationdistance" {
-        executes(
-            ArgumentTypes.players().resolve(),
-            IntegerArgumentType.integer(0, MoonriseConstants.MAX_VIEW_DISTANCE).named("simulationDistance").default { 0 },
-            DurationTypeArgument(1.seconds)
+        executes.args(
+            "players" to ArgumentTypes.players().resolve(),
+            "simulationDistance" to IntegerArgumentType.integer(0, MoonriseConstants.MAX_VIEW_DISTANCE).default { 0 },
+            "duration" to DurationTypeArgument(1.seconds).default { Duration.INFINITE }
         ) { players, simulationDistance, duration ->
             if (simulationDistance == 0 && duration == Duration.INFINITE) {
                 val simulationDistances = players.groupBy { it.simulationDistance }.entries.sortedBy { it.value.size }
@@ -83,10 +82,10 @@ fun RootIdoCommands.viewDistanceCommands() {
     }
 
     "sendviewdistance" {
-        executes(
-            ArgumentTypes.players().resolve(),
-            IntegerArgumentType.integer(0, 32).named("sendViewDistance").default { 0 },
-            DurationTypeArgument(1.seconds).named("duration").default { Duration.INFINITE }
+        executes.args(
+            "players" to ArgumentTypes.players().resolve(),
+            "sendViewDistance" to IntegerArgumentType.integer(0, 32).default { 0 },
+            "duration" to DurationTypeArgument(1.seconds).default { Duration.INFINITE }
         ) { players, sendViewDistance, duration ->
             extraCommands.plugin.launch {
                 players.forEach {

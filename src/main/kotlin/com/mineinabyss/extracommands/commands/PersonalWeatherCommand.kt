@@ -1,9 +1,7 @@
 package com.mineinabyss.extracommands.commands
 
 import com.mineinabyss.extracommands.extraCommands
-import com.mineinabyss.idofront.commands.brigadier.RootIdoCommands
-import com.mineinabyss.idofront.commands.brigadier.executes
-import com.mineinabyss.idofront.commands.brigadier.playerExecutes
+import com.mineinabyss.idofront.commands.brigadier.*
 import com.mineinabyss.idofront.messaging.success
 import com.mojang.brigadier.arguments.StringArgumentType
 import io.papermc.paper.command.brigadier.argument.ArgumentTypes
@@ -12,7 +10,7 @@ import org.bukkit.entity.Player
 
 fun RootIdoCommands.personalWeatherCommand() {
     ("personalweather" / "pweather") {
-        playerExecutes(StringArgumentType.word().suggests { PersonalWeatherType.entries.map { it.name.lowercase() } }
+        executes.asPlayer().args("weather" to StringArgumentType.word().suggests { PersonalWeatherType.entries.map { it.name.lowercase() } }
             .map { PersonalWeatherType.entries.first { w -> w.name.lowercase() == it } }
         ) { weather ->
             when (weather) {

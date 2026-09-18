@@ -2,9 +2,8 @@ package com.mineinabyss.extracommands.commands
 
 import com.mineinabyss.extracommands.extraCommands
 import com.mineinabyss.extracommands.dailyrestarts.RestartManager
-import com.mineinabyss.idofront.commands.brigadier.RootIdoCommands
+import com.mineinabyss.idofront.commands.brigadier.*
 import com.mineinabyss.idofront.commands.brigadier.arguments.DurationTypeArgument
-import com.mineinabyss.idofront.commands.brigadier.executes
 import com.mineinabyss.idofront.messaging.error
 import com.mineinabyss.idofront.messaging.success
 import kotlin.time.Duration.Companion.seconds
@@ -13,20 +12,20 @@ fun RootIdoCommands.scheduleRestartCommand(
     service: RestartManager = extraCommands.restartManager,
 ) {
     "schedulestop" {
-        executes(DurationTypeArgument(10.seconds)) { duration ->
+        executes.args("duration" to DurationTypeArgument(10.seconds)) { duration ->
             service.scheduleStop(showTitleAtStart = true, duration)
         }
     }
     "schedulerestart" {
-        executes(DurationTypeArgument(10.seconds)) { duration ->
+        executes.args("duration" to DurationTypeArgument(10.seconds)) { duration ->
             service.scheduleRestart(showTitleAtStart = true, duration)
         }
     }
     "cancelrestart" {
-        requiresPermission("extracommands.cancelrestart")
+        permission = "extracommands.cancelrestart"
 
         "daily" {
-            requiresPermission("extracommands.cancelrestart.daily")
+            permission = "extracommands.cancelrestart.daily"
             executes {
                 if (service.cancelDailyJob())
                     sender.success("Cancelled daily restart.")

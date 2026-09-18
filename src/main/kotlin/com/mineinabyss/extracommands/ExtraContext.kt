@@ -1,11 +1,20 @@
 package com.mineinabyss.extracommands
 
+import com.mineinabyss.dependencies.DI
 import com.mineinabyss.extracommands.dailyrestarts.RestartManager
-import com.mineinabyss.idofront.di.DI
+import org.bukkit.plugin.Plugin
 
-val extraCommands by DI.observe<ExtraCommandContext>()
-interface ExtraCommandContext {
-    val plugin: ExtraCommands
+/**
+ * Easy access to information related to the [ExtraCommands] plugin.
+ */
+interface ExtraCommandContext : Plugin, DI {
+    val plugin: Plugin
     val config: ExtraConfig
     val restartManager: RestartManager
+
+    companion object {
+        var instance: ExtraCommandContext? = null
+    }
 }
+
+val extraCommands get() = ExtraCommandContext.instance ?: error("ExtraCommands not loaded yet!")

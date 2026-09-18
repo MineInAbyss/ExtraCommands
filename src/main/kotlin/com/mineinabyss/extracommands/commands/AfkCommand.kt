@@ -1,7 +1,6 @@
 package com.mineinabyss.extracommands.commands
 
-import com.mineinabyss.idofront.commands.brigadier.RootIdoCommands
-import com.mineinabyss.idofront.commands.brigadier.executes
+import com.mineinabyss.idofront.commands.brigadier.*
 import com.mineinabyss.idofront.messaging.info
 import io.papermc.paper.command.brigadier.argument.ArgumentTypes
 import org.bukkit.entity.Player
@@ -22,7 +21,7 @@ fun Player.toggleAfk() = when (uniqueId in afkPlayers) {
 
 fun RootIdoCommands.afkCommand() {
     "afk" {
-        playerExecutes {
+        executes.asPlayer {
             player.info(when (player.toggleAfk()) {
                 true -> "<gray>You are now AFK"
                 false -> "<gray>You are no longer AFK"

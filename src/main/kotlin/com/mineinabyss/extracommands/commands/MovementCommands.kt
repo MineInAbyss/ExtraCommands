@@ -1,8 +1,6 @@
 package com.mineinabyss.extracommands.commands
 
-import com.mineinabyss.idofront.commands.brigadier.RootIdoCommands
-import com.mineinabyss.idofront.commands.brigadier.executes
-import com.mineinabyss.idofront.commands.brigadier.playerExecutes
+import com.mineinabyss.idofront.commands.brigadier.*
 import com.mineinabyss.idofront.messaging.error
 import com.mineinabyss.idofront.messaging.success
 import com.mojang.brigadier.arguments.FloatArgumentType
@@ -11,7 +9,7 @@ import org.bukkit.entity.Player
 
 fun RootIdoCommands.movementCommands() {
     "fly" {
-        playerExecutes(FloatArgumentType.floatArg(0.0f, 10.0f).default{(-1).toFloat()}) { speed ->
+        executes.asPlayer().args("speed" to FloatArgumentType.floatArg(0.0f, 10.0f).default{(-1).toFloat()}) { speed ->
             when (player.allowFlight) {
                 true -> {
                     player.allowFlight = false
@@ -28,18 +26,18 @@ fun RootIdoCommands.movementCommands() {
         }
     }
     "flyspeed" {
-        playerExecutes(FloatArgumentType.floatArg(0.0f, 10.0f),) { speed ->
+        executes.asPlayer().args("speed" to FloatArgumentType.floatArg(0.0f, 10.0f)) { speed ->
             player.flySpeed = speed.div(10)
         }
     }
     "walkspeed" {
         // Divide to normalize 1.0 as default speed
-        playerExecutes(FloatArgumentType.floatArg(0.0f, 10.0f),) { speed ->
+        executes.asPlayer().args("speed" to FloatArgumentType.floatArg(0.0f, 10.0f)) { speed ->
             player.walkSpeed = speed.div(5)
         }
     }
     "speed" {
-        playerExecutes(FloatArgumentType.floatArg(0.0f, 10.0f),) { speed ->
+        executes.asPlayer().args("speed" to FloatArgumentType.floatArg(0.0f, 10.0f)) { speed ->
             when (player.isFlying) {
                 true -> player.flySpeed = speed?.div(10) ?: 0.1f
                 false -> player.walkSpeed = speed?.div(5) ?: 0.2f

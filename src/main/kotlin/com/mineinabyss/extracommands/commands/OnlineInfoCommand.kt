@@ -1,6 +1,6 @@
 package com.mineinabyss.extracommands.commands
 
-import com.mineinabyss.idofront.commands.brigadier.RootIdoCommands
+import com.mineinabyss.idofront.commands.brigadier.*
 import com.mineinabyss.idofront.messaging.info
 import org.bukkit.Bukkit
 import org.bukkit.attribute.Attribute

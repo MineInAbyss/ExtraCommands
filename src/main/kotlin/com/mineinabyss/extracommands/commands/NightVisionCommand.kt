@@ -1,12 +1,12 @@
 package com.mineinabyss.extracommands.commands
 
-import com.mineinabyss.idofront.commands.brigadier.RootIdoCommands
+import com.mineinabyss.idofront.commands.brigadier.*
 import com.mineinabyss.idofront.messaging.info
 import org.bukkit.potion.PotionEffectType
 
 fun RootIdoCommands.nightVisionCommand() {
     ("nightvision" / "nv") {
-        playerExecutes {
+        executes.asPlayer {
             if (player.hasPotionEffect(PotionEffectType.NIGHT_VISION)) {
                 player.removePotionEffect(PotionEffectType.NIGHT_VISION)
                 player.info("<green>Night vision disabled.")

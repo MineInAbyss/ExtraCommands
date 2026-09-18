@@ -7,11 +7,10 @@ pluginManagement {
         maven("https://repo.papermc.io/repository/maven-public/") //Paper
         mavenLocal()
     }
-
 }
 
 dependencyResolutionManagement {
-    val idofrontVersion: String by settings
+    val miaLibs: String by settings
 
     repositories {
         maven("https://repo.mineinabyss.com/releases")
@@ -20,7 +19,9 @@ dependencyResolutionManagement {
     }
 
     versionCatalogs {
-        create("idofrontLibs").from("com.mineinabyss:catalog:$idofrontVersion")
+        create("miaLibs") {
+            from("com.mineinabyss:catalog:$miaLibs")
+        }
     }
 }
 rootProject.name = "extracommands"

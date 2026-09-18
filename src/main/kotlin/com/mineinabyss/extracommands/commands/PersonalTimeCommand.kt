@@ -1,8 +1,6 @@
 package com.mineinabyss.extracommands.commands
 
-import com.mineinabyss.idofront.commands.brigadier.RootIdoCommands
-import com.mineinabyss.idofront.commands.brigadier.executes
-import com.mineinabyss.idofront.commands.brigadier.playerExecutes
+import com.mineinabyss.idofront.commands.brigadier.*
 import com.mineinabyss.idofront.messaging.success
 import com.mojang.brigadier.arguments.StringArgumentType
 import io.papermc.paper.command.brigadier.argument.ArgumentTypes
@@ -10,8 +8,8 @@ import org.bukkit.entity.Player
 
 fun RootIdoCommands.personalTimeCommand() {
     ("personaltime" / "ptime") {
-        playerExecutes(
-            StringArgumentType.word().suggests { PersonalTimeType.entries.map { it.name.lowercase() } }.map { PersonalTimeType.valueOf(it) },
+        executes.asPlayer().args(
+            "time" to StringArgumentType.word().suggests { PersonalTimeType.entries.map { it.name.lowercase() } }.map { PersonalTimeType.valueOf(it) },
         ) { time ->
             setPlayerTime(player, time.tick)
             player.success("Set time to $time() ticks ${if (sender == player) "" else "for ${player.name}"}")

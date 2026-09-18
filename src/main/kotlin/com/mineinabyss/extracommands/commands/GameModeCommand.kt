@@ -1,8 +1,7 @@
 package com.mineinabyss.extracommands.commands
 
 import com.mineinabyss.idofront.commands.brigadier.IdoCommand
-import com.mineinabyss.idofront.commands.brigadier.RootIdoCommands
-import com.mineinabyss.idofront.commands.brigadier.executes
+import com.mineinabyss.idofront.commands.brigadier.*
 import com.mineinabyss.idofront.messaging.info
 import io.papermc.paper.command.brigadier.argument.ArgumentTypes
 import org.bukkit.GameMode
@@ -10,8 +9,8 @@ import org.bukkit.entity.Player
 
 fun RootIdoCommands.gameModeCommand() {
     fun IdoCommand.gamemodeShortcut(gameMode: GameMode) {
-        requiresPermission("extracommands.gamemode.${gameMode.name.lowercase()}")
-        playerExecutes {
+        permission = "extracommands.gamemode.${gameMode.name.lowercase()}"
+        executes.asPlayer {
             player.gameMode = gameMode
             sender.info("<gold>Gamemode set to <i>${gameMode.name.lowercase()}</i>")
         }

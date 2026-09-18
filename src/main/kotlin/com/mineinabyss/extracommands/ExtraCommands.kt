@@ -1,43 +1,43 @@
 package com.mineinabyss.extracommands
 
+import com.mineinabyss.dependencies.DI
+import com.mineinabyss.dependencies.DIContext
+import com.mineinabyss.dependencies.get
+import com.mineinabyss.dependencies.getLazy
+import com.mineinabyss.dependencies.loadCatching
+import com.mineinabyss.dependencies.scope
+import com.mineinabyss.dependencies.single
 import com.mineinabyss.extracommands.dailyrestarts.RestartManager
-import com.mineinabyss.extracommands.listeners.AfkListener
-import com.mineinabyss.extracommands.listeners.GodListener
-import com.mineinabyss.extracommands.listeners.HuskHomesListener
-import com.mineinabyss.extracommands.listeners.SeenListener
-import com.mineinabyss.extracommands.listeners.VanishListener
-import com.mineinabyss.idofront.config.config
-import com.mineinabyss.idofront.di.DI
-import com.mineinabyss.idofront.plugin.Plugins
-import com.mineinabyss.idofront.plugin.listeners
+import com.mineinabyss.idofront.config.SingleConfig
+import com.mineinabyss.idofront.features.singleConfig
+import com.mineinabyss.idofront.features.singlePluginLogger
+import org.bukkit.plugin.Plugin
 import org.bukkit.plugin.java.JavaPlugin
 
-class ExtraCommands : JavaPlugin() {
-
-    override fun onEnable() {
-        createExtraCommandsContext()
-        ExtraBrigadierCommands.registerCommands()
-
-        extraCommands.restartManager.scheduleDailyRestartIfEnabled()
-
-        listeners(
-            AfkListener(),
-            GodListener(),
-            SeenListener(),
-            VanishListener()
-        )
-
-        if (Plugins.isEnabled("HuskHomes")) listeners(HuskHomesListener())
-
-        if (Plugins.isEnabled("PlaceholderAPI")) ExtraPlaceholders().register()
+class ExtraCommands : JavaPlugin(), ExtraCommandContext {
+    override val di: DIContext = DI {
+        single<Plugin> { this@ExtraCommands }
+        singlePluginLogger(this@ExtraCommands)
+        singleConfig<ExtraConfig>("config.yml") { default = ExtraConfig() }
+        single { RestartManager(get<ExtraConfig>().dailyRestarts) }
     }
 
-    fun createExtraCommandsContext() {
-        DI.remove<ExtraCommandContext>()
-        DI.add<ExtraCommandContext>(object : ExtraCommandContext {
-            override val plugin = this@ExtraCommands
-            override val config by config("config", dataFolder.toPath(), ExtraConfig())
-            override val restartManager: RestartManager = RestartManager(config.dailyRestarts)
-        })
+    override val plugin: Plugin get() = this
+    override val config: ExtraConfig by getLazy()
+    override val restartManager: RestartManager by getLazy()
+
+    override fun onLoad() {
+        ExtraCommandContext.instance = this@ExtraCommands
+    }
+
+    override fun onEnable() {
+        scope.loadCatching(ExtraCommandsFeature)
+
+        ExtraBrigadierCommands.registerCommands()
+        restartManager.scheduleDailyRestartIfEnabled()
+    }
+
+    override fun reloadConfig() {
+        get<SingleConfig<ExtraConfig>>().updateCached()
     }
 }
