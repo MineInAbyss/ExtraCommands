@@ -14,6 +14,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          # nextVersion derives the version from git tags, a shallow tagless clone breaks it
+          fetch-depth: 0
 
       - uses: MineInAbyss/publish-action@v3
         with:
