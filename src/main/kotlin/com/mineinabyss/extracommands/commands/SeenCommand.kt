@@ -2,14 +2,15 @@ package com.mineinabyss.extracommands.commands
 
 import com.github.shynixn.mccoroutine.bukkit.asyncDispatcher
 import com.github.shynixn.mccoroutine.bukkit.launch
+import com.github.shynixn.mccoroutine.bukkit.minecraftDispatcher
 import com.mineinabyss.extracommands.extraCommands
 import com.mineinabyss.extracommands.listeners.SeenListener
 import com.mineinabyss.idofront.commands.brigadier.*
 import com.mineinabyss.idofront.messaging.error
 import com.mineinabyss.idofront.messaging.info
 import com.mojang.brigadier.arguments.StringArgumentType
+import kotlinx.coroutines.withContext
 import org.bukkit.Bukkit
-import org.bukkit.OfflinePlayer
 import java.time.Instant
 import java.util.*
 import java.util.concurrent.TimeUnit
@@ -20,23 +21,23 @@ import kotlin.time.toDuration
 fun RootIdoCommands.seenCommand() {
     "seen" {
         executes.args("player" to StringArgumentType.word().suggests { suggest(SeenListener.previouslyOnline.toList()) }) { player ->
-            var offlinePlayer = Bukkit.getPlayerExact(player) as? OfflinePlayer
+            if (Bukkit.getPlayerExact(player) != null) return@args sender.error("A player with the name $player is currently online.")
 
             SeenListener.currentlyQuerying[sender]?.also {
                 return@args sender.error("You are currently looking up another player, waiting for lookup to finish...")
             }
 
-            if (offlinePlayer == null) {
-                SeenListener.currentlyQuerying[sender] = extraCommands.plugin.launch(extraCommands.plugin.asyncDispatcher) {
-                    offlinePlayer = Bukkit.getOfflinePlayerIfCached(player) ?: Bukkit.getOfflinePlayer(player)
-                }.also { it.invokeOnCompletion { SeenListener.currentlyQuerying.remove(sender) } }
-            }
+            val plugin = extraCommands.plugin
+            SeenListener.currentlyQuerying[sender] = plugin.launch(plugin.asyncDispatcher) {
+                val offlinePlayer = Bukkit.getOfflinePlayerIfCached(player) ?: Bukkit.getOfflinePlayer(player)
+                withContext(plugin.minecraftDispatcher) {
+                    if (!offlinePlayer.hasPlayedBefore()) return@withContext sender.error("A player with the name $player has never joined the server.")
+                    if (offlinePlayer.isOnline) return@withContext sender.error("A player with the name $player is currently online.")
 
-            if (offlinePlayer?.hasPlayedBefore() != true) return@args sender.error("A player with the  name $player has never joined the server.")
-            if (offlinePlayer!!.isOnline) return@args sender.error("A player with the name $player is currently online.")
-
-            val timeSince = calculateTime(dateDifference(Date(offlinePlayer!!.lastSeen)))
-            sender.info("<gold><i>$player</i> was last seen <yellow>$timeSince</yellow> ago.")
+                    val timeSince = calculateTime(dateDifference(Date(offlinePlayer.lastSeen)))
+                    sender.info("<gold><i>$player</i> was last seen <yellow>$timeSince</yellow> ago.")
+                }
+            }.also { it.invokeOnCompletion { SeenListener.currentlyQuerying.remove(sender) } }
         }
     }
 }

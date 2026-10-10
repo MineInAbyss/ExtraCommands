@@ -3,16 +3,20 @@ package com.mineinabyss.extracommands.commands
 import com.mineinabyss.idofront.commands.brigadier.*
 import com.mineinabyss.idofront.messaging.success
 import com.mojang.brigadier.arguments.StringArgumentType
-import io.papermc.paper.command.brigadier.argument.ArgumentTypes
 import org.bukkit.entity.Player
 
 fun RootIdoCommands.personalTimeCommand() {
     ("personaltime" / "ptime") {
         executes.asPlayer().args(
-            "time" to StringArgumentType.word().suggests { PersonalTimeType.entries.map { it.name.lowercase() } }.map { PersonalTimeType.valueOf(it) },
+            "time" to StringArgumentType.word().suggests { suggestFiltering(PersonalTimeType.entries.map { it.name.lowercase() }) }
+                .map { PersonalTimeType.entries.firstOrNull { type -> type.name.equals(it, ignoreCase = true) } ?: fail("Unknown time $it") },
         ) { time ->
             setPlayerTime(player, time.tick)
-            player.success("Set time to $time() ticks ${if (sender == player) "" else "for ${player.name}"}")
+            val target = if (sender == player) "" else " for ${player.name}"
+            when (time.tick) {
+                null -> player.success("Reset time$target")
+                else -> player.success("Set time to ${time.name.lowercase()}$target")
+            }
         }
     }
 }
