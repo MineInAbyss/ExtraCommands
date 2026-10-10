@@ -26,6 +26,7 @@ object ExtraBrigadierCommands {
             expCommand()
             chunkCommands()
             mineInAbyssCommands()
+            if (passiveViewingSupported()) openPassiveCommand()
         }
     }
 }

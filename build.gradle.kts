@@ -18,6 +18,7 @@ repositories {
     maven("https://repo.papermc.io/repository/maven-public/")
     maven("https://repo.extendedclip.com/content/repositories/placeholderapi/")
     maven("https://repo.william278.net/releases")
+    maven("https://jitpack.io")
     mavenLocal()
 }
 
@@ -28,6 +29,7 @@ dependencies {
     compileOnly(miaLibs.chatty)
     compileOnly(miaLibs.minecraft.plugin.placeholderapi)
     compileOnly(libs.huskhomes)
+    compileOnly(libs.openinv)
 }
 
 java {
@@ -66,6 +68,11 @@ paper {
             joinClasspath = true
         }
         register("HuskHomes") {
+            required = false
+            load = PaperPluginDescription.RelativeLoadOrder.BEFORE
+            joinClasspath = true
+        }
+        register("OpenInv") {
             required = false
             load = PaperPluginDescription.RelativeLoadOrder.BEFORE
             joinClasspath = true

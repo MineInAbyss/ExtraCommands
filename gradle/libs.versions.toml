@@ -1,2 +1,3 @@
 [libraries]
 huskhomes = "net.william278.huskhomes:huskhomes-bukkit:4.10"
+openinv = "com.github.Jikoo:OpenInv:5.3.4"

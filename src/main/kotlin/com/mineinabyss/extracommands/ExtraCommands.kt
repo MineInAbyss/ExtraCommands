@@ -7,6 +7,7 @@ import com.mineinabyss.dependencies.getLazy
 import com.mineinabyss.dependencies.loadCatching
 import com.mineinabyss.dependencies.scope
 import com.mineinabyss.dependencies.single
+import com.mineinabyss.extracommands.commands.closePassiveViews
 import com.mineinabyss.extracommands.dailyrestarts.RestartManager
 import com.mineinabyss.idofront.config.SingleConfig
 import com.mineinabyss.idofront.features.singleConfig
@@ -35,6 +36,10 @@ class ExtraCommands : JavaPlugin(), ExtraCommandContext {
 
         ExtraBrigadierCommands.registerCommands()
         restartManager.scheduleDailyRestartIfEnabled()
+    }
+
+    override fun onDisable() {
+        if (passiveViewingSupported()) closePassiveViews()
     }
 
     override fun reloadConfig() {
