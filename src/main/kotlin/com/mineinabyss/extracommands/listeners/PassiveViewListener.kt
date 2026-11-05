@@ -22,13 +22,13 @@ import org.bukkit.event.player.PlayerJoinEvent
 class PassiveViewListener : Listener {
     @EventHandler(priority = EventPriority.LOWEST)
     fun InventoryClickEvent.blockViewOnly() {
-        val passive = view.topInventory.holder as? PassiveInventory ?: return
+        val passive = view.topInventory.getHolder(false) as? PassiveInventory ?: return
         if (isPassiveEditBlocked(view, passive)) isCancelled = true
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
     fun InventoryDragEvent.blockViewOnly() {
-        val passive = view.topInventory.holder as? PassiveInventory ?: return
+        val passive = view.topInventory.getHolder(false) as? PassiveInventory ?: return
         if (isPassiveEditBlocked(view, passive)) isCancelled = true
     }
 
@@ -51,7 +51,7 @@ class PassiveViewListener : Listener {
     @EventHandler
     fun PlayerChangedWorldEvent.closeCrossWorldViewers() {
         closeViewersWithoutAccess(player)
-        val viewed = (player.openInventory.topInventory.holder as? PassiveInventory)?.player ?: return
+        val viewed = (player.openInventory.topInventory.getHolder(false) as? PassiveInventory)?.player ?: return
         if (viewed != player && viewed.world != player.world && !Permissions.ACCESS_CROSSWORLD.hasPermission(player)) player.closeInventory()
     }
 

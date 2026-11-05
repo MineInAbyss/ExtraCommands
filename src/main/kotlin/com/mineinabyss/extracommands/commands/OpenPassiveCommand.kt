@@ -124,5 +124,5 @@ fun isPassiveEditBlocked(view: InventoryView, passive: PassiveInventory) =
     view in passiveViewOnly || (PassiveSlots.isDetached(passive) && (openInv.disableSaving() || openInv.disableOfflineAccess()))
 
 fun closePassiveViews() {
-    Bukkit.getOnlinePlayers().filter { it.openInventory.topInventory.holder is PassiveInventory }.forEach { it.closeInventory() }
+    Bukkit.getOnlinePlayers().filter { it.openInventory.topInventory.getHolder(false) is PassiveInventory }.forEach { it.closeInventory() }
 }
